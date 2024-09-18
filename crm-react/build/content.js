@@ -3,25 +3,30 @@ console.log("JavaScript injetado em uma página!");
 
 (function() {
   const newElement = document.createElement('div');
-  newElement.innerText = 'Olá, esta é uma injeção de JavaScript!';
+  newElement.innerText = 'JavaScript injetado!!!';
   newElement.style.position = 'fixed';
   newElement.style.bottom = '10px';
   newElement.style.right = '10px';
-  newElement.style.backgroundColor = 'lightblue';
+  newElement.style.backgroundColor = 'red';
   newElement.style.padding = '10px';
   newElement.style.zIndex = '9999';
   document.body.appendChild(newElement);
 })();
-// Seleciona a div pelo seletor de classe
-const divElement = document.querySelector('.q-item__label.text-bold');
+function minhaFuncao() {
 
-// Verifica se o elemento foi encontrado
-if (divElement) {
-    // Pega o texto dentro da div
-    const content = divElement.textContent.trim();
-    console.log(content); // Exibe o conteúdo no console
-    alert("Funcionou: " + content); // Alerta com o conteúdo
-} else {
-    console.log('Elemento não encontrado');
-    alert("Não funcionou");
+  const divElement = document.querySelector('.q-item__label.text-bold');
+  if (divElement) {
+
+      const content = divElement.textContent.trim();
+      console.log(content); 
+      alert("Funcionou: " + content); 
+
+  } else {
+
+      console.log('Elemento não encontrado');
+      alert("Não funcionou");
+  }
 }
+setTimeout(minhaFuncao, 3000);
+
+//08/09/2024#836281arrow_drop_down
