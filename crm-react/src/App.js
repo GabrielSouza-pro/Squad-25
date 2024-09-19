@@ -1,58 +1,37 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState, useEffect } from 'react';
+import './App.css';
 
-const Container = ({ id, title, content }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+function App() {
+  const [token, setToken] = useState('');
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+  // Carregar o token do Local Storage ao montar o componente
+  useEffect(() => {
+    const savedToken = localStorage.getItem('token');
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  }, []); // O array vazio garante que isso rode apenas quando o componente for montado
+
+  const handleSave = () => {
+    // Salvar o token no Local Storage
+    localStorage.setItem('token', token);
+    console.log('Token salvo no Local Storage:', token);
   };
 
   return (
-    <div className={`container ${isExpanded ? "expanded" : ""}`} onClick={toggleExpand} id={id}>
-      <div className="header">
-        <p className="textos">{title}</p>
-      </div>
-      {isExpanded && (
-        <div className="content">
-          <br />
-          <p className="textos-baixos">{content}</p>
-        </div>
-      )}
-    </div>
-  );
-};
-
-function App() {
-  return (
     <div className="App">
-      <h1 className="crm-titulo">CRM</h1>
-      <hr />
-      <Container id="expandableContainer1" title="Empresas" content="Informações da Empresa." />
+      <h1 className="crm-titulo">Crm config</h1>
+      <hr id="hr1" />
+      <label className="textos-baixos">Token:</label>
+      <input 
+        type="text" 
+        placeholder="seu token aqui" 
+        value={token} // O campo de texto agora exibe o valor salvo
+        onChange={(e) => setToken(e.target.value)} 
+      />
       <br />
-      <Container id="expandableContainer2" title="Negociações" content="Registro das Negociações." />
-      <br />
-      <Container id="expandableContainer3" title="Produto das negociações " content="Informações dos Produto e das negociações ." />
-      <br />
-      <Container id="expandableContainer4" title="Produtos" content="Detalhes sobre os Produtos." />
-      <br />
-      <Container id="expandableContainer5" title="Campos personalizados " content="Campos personalizados  dos clientes." />
-      <br />
-      <Container id="expandableContainer6" title="Funil de vendas" content="Análise do Funil de vendas." />
-      <br />
-      <Container id="expandableContainer7" title="Etapas do funil de vendas " content="Registro das Etapas do funil de vendas." />
-      <br />
-      <Container id="expandableContainer8" title="Tarefas" content="lista de Tarefas" />
-      <br />
-      <Container id="expandableContainer9" title="Anotações" content="Anotações do cliente." />
-      <br />
-      <Container id="expandableContainer10" title="Equipes" content="Equipes" />
-      <br />
-      <Container id="expandableContainer11" title="Fontes" content="Fontes." />
-      <br />
-      <Container id="expandableContainer12" title="Campanhas" content="Campanhas." />
-      <br />
-      <Container id="expandableContainer13" title="Motivo da perda " content="Motivo da perda." />
+      <input type="button" id="salvar" value="Salvar" onClick={handleSave} />
+      <div id="divisao"></div>
     </div>
   );
 }
