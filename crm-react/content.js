@@ -112,7 +112,7 @@ console.log("JavaScript injetado em uma página!");
       let content = divElement.textContent.trim();
       console.log("Texto original: " + content);
 
-      // Filtra o texto conforme solicitado
+      // Filtra o texto 
       content = content.replace(/.{2}\/.*/, ''); // Remove os dois caracteres anteriores à barra e tudo depois dela
 
       // Verifica se o conteúdo mudou
