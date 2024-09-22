@@ -4,47 +4,42 @@ console.log("JavaScript injetado em uma página!");
 (function() {
   // Torna o body um contêiner flexível
   document.body.style.display = 'flex';
-  document.body.style.flexDirection = 'row'; // Garante que os elementos fiquem lado a lado (horizontalmente)
+  document.body.style.flexDirection = 'row';
 
   // Cria a nova aba lateral
   const newElement = document.createElement('div');
-  newElement.style.height = '100vh'; // Faz com que o elemento ocupe toda a altura da página
-  newElement.style.width = '500px'; // Define a largura da aba lateral
-  newElement.style.backgroundColor = 'rgb(30, 30, 30)'; // Cor de fundo
+  newElement.style.height = '100vh';
+  newElement.style.width = '500px';
+  newElement.style.backgroundColor = 'rgb(30, 30, 30)';
   newElement.style.padding = '1px';
-  newElement.style.boxSizing = 'border-box'; // Garante que o padding seja incluído na largura total
-  newElement.style.border = '3px solid rgb(10, 15, 18)'; // Borda de 3px com a cor RGB
+  newElement.style.boxSizing = 'border-box';
+  newElement.style.border = '3px solid rgb(10, 15, 18)';
   newElement.style.borderRadius = '12px';
 
   // Cria o contêiner para o nome do cliente
   const clientNameContainer = document.createElement('div');
-  clientNameContainer.style.width = '100%'; // Define a largura como 100%
-  clientNameContainer.style.marginBottom = '20px'; // Espaçamento abaixo do contêiner
+  clientNameContainer.style.width = '100%';
+  clientNameContainer.style.marginBottom = '20px';
   clientNameContainer.style.padding = '10px';
-  clientNameContainer.style.backgroundColor = '#63636370'; // Cor de fundo com transparência
-  clientNameContainer.style.borderTopLeftRadius = '10px'; // Arredonda a borda superior esquerda
-  clientNameContainer.style.borderTopRightRadius = '10px'; // Arredonda a borda superior direita
+  clientNameContainer.style.backgroundColor = '#63636370';
+  clientNameContainer.style.borderTopLeftRadius = '10px';
+  clientNameContainer.style.borderTopRightRadius = '10px';
 
   // Adiciona o nome do cliente ao contêiner
   const clientName = document.createElement('h2');
-  clientName.innerText = 'Cliente:'; // Substitua pelo nome real do cliente
-  clientName.style.color = 'white'; // Cor do texto
-  clientName.style.textAlign = 'center'; // Alinha o texto ao centro
-  clientName.id = 'clientName'; // Adiciona um ID para facilitar a seleção
+  clientName.innerText = 'Cliente:';
+  clientName.style.color = 'white';
+  clientName.style.textAlign = 'center';
+  clientName.id = 'clientName';
 
   clientNameContainer.appendChild(clientName);
-
-  // Adiciona o contêiner do nome do cliente acima do título CRM
   newElement.appendChild(clientNameContainer);
 
-  // Cria e adiciona o título CRM dentro da aba lateral
+  // Cria e adiciona o título CRM
   const titulocrm = document.createElement('h1');
   titulocrm.innerText = 'CRM';
-
-  // Estiliza o título diretamente no JavaScript
   titulocrm.style.textAlign = 'center';
   titulocrm.style.fontFamily = "'Noto Sans', sans-serif";
-  titulocrm.style.fontStyle = 'normal';
   titulocrm.style.fontWeight = '400';
   titulocrm.style.fontSize = '40px';
   titulocrm.style.lineHeight = '54px';
@@ -56,29 +51,27 @@ console.log("JavaScript injetado em uma página!");
 
   newElement.appendChild(titulocrm);
 
-  // Cria e estiliza a linha horizontal
+  // Linha horizontal
   const hr = document.createElement('hr');
-  hr.style.border = 'none'; // Remove a borda padrão
-  hr.style.borderTop = '2px solid rgb(200, 200, 200)'; // Define a borda superior como uma linha sólida cinza claro
-  hr.style.margin = '0 0 20px 0'; // Remove as margens acima e abaixo da linha
-
-  // Adiciona a linha horizontal à aba lateral
+  hr.style.border = 'none';
+  hr.style.borderTop = '2px solid rgb(200, 200, 200)';
+  hr.style.margin = '0 0 20px 0';
   newElement.appendChild(hr);
 
-  // Cria o contêiner expansível
+  // Contêiner expansível
   const expandableContainer = document.createElement('div');
-  expandableContainer.style.overflow = 'hidden'; // Garante que o conteúdo oculto não seja exibido
-  expandableContainer.style.maxHeight = '0'; // Inicialmente oculto
-  expandableContainer.style.opacity = '0'; // Inicialmente oculto
-  expandableContainer.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out'; // Adiciona uma transição suave
-  expandableContainer.style.backgroundColor = 'rgb(40, 40, 40)'; // Cor de fundo do contêiner expansível
-  expandableContainer.style.padding = '10px'; // Adiciona algum padding para o conteúdo
-  expandableContainer.style.boxSizing = 'border-box'; // Garante que o padding seja incluído na largura total
+  expandableContainer.style.overflow = 'hidden';
+  expandableContainer.style.maxHeight = '0';
+  expandableContainer.style.opacity = '0';
+  expandableContainer.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
+  expandableContainer.style.backgroundColor = 'rgb(40, 40, 40)';
+  expandableContainer.style.padding = '10px';
+  expandableContainer.style.boxSizing = 'border-box';
 
-  // Cria o botão para expandir/contrair o contêiner
+  // Botão para expandir/contrair
   const toggleButton = document.createElement('button');
   toggleButton.innerText = 'Empresas';
-  toggleButton.style.marginBottom = '10px'; // Adiciona margem inferior para separar o botão do conteúdo
+  toggleButton.style.marginBottom = '10px';
   toggleButton.style.width = '100%';
   toggleButton.style.padding = '10px';
   toggleButton.style.border = 'none';
@@ -88,60 +81,64 @@ console.log("JavaScript injetado em uma página!");
   toggleButton.style.fontSize = '16px';
   toggleButton.style.cursor = 'pointer';
 
-  // Adiciona o botão ao contêiner
   newElement.appendChild(toggleButton);
-
-  // Cria o conteúdo do contêiner
   const content = document.createElement('p');
   content.innerText = 'Este é o conteúdo expandido que pode ser mostrado ou ocultado.';
-  content.style.margin = '0'; // Remove margens padrão
-
-  // Adiciona o conteúdo ao contêiner
+  content.style.margin = '0';
   expandableContainer.appendChild(content);
-
-  // Adiciona o contêiner à aba lateral
   newElement.appendChild(expandableContainer);
 
-  // Configura o botão para expandir/contrair o contêiner
   let isExpanded = false;
   toggleButton.addEventListener('click', () => {
     if (isExpanded) {
       expandableContainer.style.maxHeight = '0';
       expandableContainer.style.opacity = '0';
     } else {
-      expandableContainer.style.maxHeight = '200px'; // Ajuste o valor conforme necessário
+      expandableContainer.style.maxHeight = '200px';
       expandableContainer.style.opacity = '1';
     }
     isExpanded = !isExpanded;
   });
 
-  // Cria e adiciona o conteúdo adicional à aba lateral
-
-  // Adiciona a aba lateral ao body
   document.body.appendChild(newElement);
+  
+  // Variável para armazenar o último valor
+  let lastContent = '';
+
+  // Função que será chamada periodicamente
+  function minhaFuncao() {
+    const divElement = document.querySelector('.q-item__label.text-bold');
+    if (divElement) {
+      let content = divElement.textContent.trim();
+      console.log("Texto original: " + content);
+
+      // Filtra o texto conforme solicitado
+      content = content.replace(/.{2}\/.*/, ''); // Remove os dois caracteres anteriores à barra e tudo depois dela
+
+      // Verifica se o conteúdo mudou
+      if (content !== lastContent) {
+        lastContent = content; // Atualiza o último conteúdo
+        console.log("Texto filtrado: " + content);
+
+        // Atualiza o texto do clientName
+        const clientName = document.getElementById('clientName');
+        if (clientName) {
+          clientName.innerText = `Cliente: ${content}`;
+          console.log("Texto atualizado para: " + content); // Log de sucesso
+        } else {
+          console.log('Elemento clientName não encontrado');
+        }
+      } else {
+        console.log("Nenhuma mudança detectada no texto.");
+      }
+    } else {
+      console.log('Elemento divElement não encontrado');
+    }
+  }
+
+  // Executa a função a cada 1 segundo
+  setInterval(minhaFuncao, 1000);
+
+  // Chama a função imediatamente ao iniciar
+  minhaFuncao();
 })();
-
-function minhaFuncao() {
-  const divElement = document.querySelector('.q-item__label.text-bold');
-  if (divElement) {
-    let content = divElement.textContent.trim();
-    console.log("Texto original: " + content);
-
-    // Filtra o texto conforme solicitado
-    content = content.replace(/.{2}\/.*/, ''); // Remove os dois caracteres anteriores à barra e tudo depois dela
-
-    console.log("Texto filtrado: " + content);
-
-   // Atualiza o texto do clientName
-   const clientName = document.getElementById('clientName');
-   if (clientName) {
-     clientName.innerText = `Cliente: ${content}`;
-     console.log("Texto atualizado para: " + content); // Log de sucesso
-   } else {
-     console.log('Elemento clientName não encontrado');
-   }
- } else {
-   console.log('Elemento divElement não encontrado');
- }
-}
-setTimeout(minhaFuncao, 3000);
