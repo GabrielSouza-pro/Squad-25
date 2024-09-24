@@ -99,6 +99,48 @@ console.log("JavaScript injetado em uma página!");
     }
     isExpanded = !isExpanded;
   });
+    // Contêiner expansível
+    const expandableContainer2 = document.createElement('div');
+    expandableContainer2.style.overflow = 'hidden';
+    expandableContainer2.style.maxHeight = '0';
+    expandableContainer2.style.opacity = '0';
+    expandableContainer2.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
+    expandableContainer2.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer2.style.padding = '10px';
+    expandableContainer2.style.boxSizing = 'border-box';
+  
+    // Botão para expandir/contrair
+    const toggleButton2 = document.createElement('button');
+    toggleButton2.innerText = 'Negociações';
+    toggleButton2.style.marginBottom = '10px';
+    toggleButton2.style.width = '100%';
+    toggleButton2.style.padding = '10px';
+    toggleButton2.style.border = 'none';
+    toggleButton2.style.borderRadius = '5px';
+    toggleButton2.style.backgroundColor = '#63636370';
+    toggleButton2.style.color = 'white';
+    toggleButton2.style.fontSize = '16px';
+    toggleButton2.style.cursor = 'pointer';
+  
+    newElement.appendChild(toggleButton2);
+    const content2 = document.createElement('p');
+    content2.innerText = 'Este é o conteúdo expandido que pode ser mostrado ou ocultado.';
+    content2.style.margin = '0';
+    expandableContainer2.appendChild(content2);
+    newElement.appendChild(expandableContainer2);
+  
+    let isExpanded2 = false;
+    toggleButton2.addEventListener('click', () => {
+      if (isExpanded2) {
+        expandableContainer2.style.maxHeight = '0';
+        expandableContainer2.style.opacity = '0';
+      } else {
+        expandableContainer2.style.maxHeight = '200px';
+        expandableContainer2.style.opacity = '1';
+      }
+      isExpanded2 = !isExpanded2;
+    });
+  
 
   document.body.appendChild(newElement);
   
