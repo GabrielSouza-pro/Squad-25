@@ -623,10 +623,6 @@ console.log("JavaScript injetado em uma página!");
       isExpanded13 = !isExpanded13;
     });
 
-
-
-     
-
   document.body.appendChild(newElement);
   
   // Variável para armazenar o último valor
