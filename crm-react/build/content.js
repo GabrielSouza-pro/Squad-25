@@ -1,6 +1,5 @@
 // content.js
 console.log("JavaScript injetado em uma página!");
-
 (function() {
   // Torna o body um contêiner flexível
   document.body.style.display = 'flex';
@@ -10,10 +9,10 @@ console.log("JavaScript injetado em uma página!");
   const newElement = document.createElement('div');
   newElement.style.height = '100vh';
   newElement.style.width = '500px';
-  newElement.style.backgroundColor = 'rgb(30, 30, 30)';
+  newElement.style.backgroundColor = 'rgb(FF,FF,FF)';
   newElement.style.padding = '1px';
   newElement.style.boxSizing = 'border-box';
-  newElement.style.border = '3px solid rgb(10, 15, 18)';
+  newElement.style.border = '3px solid rgb(128, 128, 128)';
   newElement.style.borderRadius = '12px';
   newElement.style.overflow = 'auto';
 
@@ -39,6 +38,7 @@ console.log("JavaScript injetado em uma página!");
   // Cria e adiciona o título CRM
   const titulocrm = document.createElement('h1');
   titulocrm.innerText = 'CRM';
+  titulocrm.style.borderColor = 'white'
   titulocrm.style.textAlign = 'center';
   titulocrm.style.fontFamily = "'Noto Sans', sans-serif";
   titulocrm.style.fontWeight = '400';
@@ -53,19 +53,14 @@ console.log("JavaScript injetado em uma página!");
   newElement.appendChild(titulocrm);
 
   // Linha horizontal
-  const hr = document.createElement('hr');
-  hr.style.border = 'none';
-  hr.style.borderTop = '2px solid rgb(200, 200, 200)';
-  hr.style.margin = '0 0 20px 0';
-  newElement.appendChild(hr);
-
+  
   // Contêiner expansível
   const expandableContainer = document.createElement('div');
   expandableContainer.style.overflow = 'hidden';
   expandableContainer.style.maxHeight = '0';
   expandableContainer.style.opacity = '0';
   expandableContainer.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-  expandableContainer.style.backgroundColor = 'rgb(40, 40, 40)';
+  expandableContainer.style.backgroundColor = 'rgb(FF,FF,FF)';
   expandableContainer.style.padding = '10px';
   expandableContainer.style.boxSizing = 'border-box';
 
@@ -106,7 +101,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer2.style.maxHeight = '0';
     expandableContainer2.style.opacity = '0';
     expandableContainer2.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer2.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer2.style.backgroundColor = 'rgb(FF,FF,FF)';
     expandableContainer2.style.padding = '10px';
     expandableContainer2.style.boxSizing = 'border-box';
   
@@ -149,7 +144,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer3.style.maxHeight = '0';
     expandableContainer3.style.opacity = '0';
     expandableContainer3.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer3.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer3.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer3.style.padding = '10px';
     expandableContainer3.style.boxSizing = 'border-box';
   
@@ -193,7 +188,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer4.style.maxHeight = '0';
     expandableContainer4.style.opacity = '0';
     expandableContainer4.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer4.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer4.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer4.style.padding = '10px';
     expandableContainer4.style.boxSizing = 'border-box';
   
@@ -237,7 +232,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer5.style.maxHeight = '0';
     expandableContainer5.style.opacity = '0';
     expandableContainer5.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer5.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer5.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer5.style.padding = '10px';
     expandableContainer5.style.boxSizing = 'border-box';
   
@@ -281,7 +276,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer6.style.maxHeight = '0';
     expandableContainer6.style.opacity = '0';
     expandableContainer6.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer6.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer6.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer6.style.padding = '10px';
     expandableContainer6.style.boxSizing = 'border-box';
   
@@ -369,7 +364,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer8.style.maxHeight = '0';
     expandableContainer8.style.opacity = '0';
     expandableContainer8.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer8.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer8.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer8.style.padding = '10px';
     expandableContainer8.style.boxSizing = 'border-box';
   
@@ -413,7 +408,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer9.style.maxHeight = '0';
     expandableContainer9.style.opacity = '0';
     expandableContainer9.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer9.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer9.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer9.style.padding = '10px';
     expandableContainer9.style.boxSizing = 'border-box';
   
@@ -457,7 +452,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer10.style.maxHeight = '0';
     expandableContainer10.style.opacity = '0';
     expandableContainer10.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer10.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer10.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer10.style.padding = '10px';
     expandableContainer10.style.boxSizing = 'border-box';
   
@@ -501,7 +496,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer11.style.maxHeight = '0';
     expandableContainer11.style.opacity = '0';
     expandableContainer11.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer11.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer11.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer11.style.padding = '10px';
     expandableContainer11.style.boxSizing = 'border-box';
   
@@ -544,7 +539,7 @@ console.log("JavaScript injetado em uma página!");
     expandableContainer12.style.maxHeight = '0';
     expandableContainer12.style.opacity = '0';
     expandableContainer12.style.transition = 'max-height 0.5s ease-out, opacity 0.5s ease-out';
-    expandableContainer12.style.backgroundColor = 'rgb(40, 40, 40)';
+    expandableContainer12.style.backgroundColor = 'rgb(FF, FF, FF)';
     expandableContainer12.style.padding = '10px';
     expandableContainer12.style.boxSizing = 'border-box';
   
@@ -660,7 +655,7 @@ console.log("JavaScript injetado em uma página!");
   }
 
   // Executa a função a cada 1 segundo
-  setInterval(minhaFuncao, 1000);
+    
 
   // Chama a função imediatamente ao iniciar
   minhaFuncao();
