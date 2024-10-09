@@ -1,6 +1,8 @@
 // content.js
 console.log("JavaScript injetado em uma página!");
 
+
+
 (function() {
   // Cria a nova aba lateral
   const newElement = document.createElement('div');
@@ -92,63 +94,101 @@ console.log("JavaScript injetado em uma página!");
   
   
   document.body.appendChild(newElement);
-  
+   
 
 
 
 
-  function minhaFuncao() {
-    // Obtém o token do localStorage
-    const token = localStorage.getItem("token");
-    console.log("Token:", token);
-    
-    // Verifica se o token está disponível
-    if (!token) {
-        console.error("Token não encontrado no localStorage.");
-        return; // Interrompe a função se o token não estiver presente
-    }
-  
-    // Faz a requisição para a API
-    fetch("https://chatapi.jetsalesbrasil.com/tickets/897562?id=897562", {
-        headers: {
-            "accept": "application/json, text/plain,/",
-            "authorization": `Bearer ${token}` // Usa o token do localStorage
-        },
-        body:null,
-        method: "GET"
-    })
-    .then(response => {
-        // Verifica se a resposta foi bem-sucedida
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.statusText}`);
-        }
-        return response.json(); // Converte a resposta para JSON
-    })
-    .then(data => {
-        // Acesse o campo 'name' do ticket
-        if (data.tickets && data.tickets.length > 0) {
-            const content = data.tickets[0].name; // Obtém o nome do cliente
-            console.log("Texto original: " + content);
-  
-            // Atualiza o texto do clientName
-            const clientName = document.getElementById('clientName');
-            if (clientName) {
-                clientName.innerText = `Cliente: ${content}`;
-                console.log("Texto atualizado para: " + content); // Log de sucesso
-            } else {
-                console.log('Elemento clientName não encontrado');
-            }
-        } else {
-            console.error("Nenhum ticket encontrado na resposta.");
-        }
-    })
-    .catch(error => {
-        console.error('Houve um problema com a operação fetch:', error);
-    });
+// Função para verificar o ID na URL e fazer a requisição para a API
+function minhaFuncao() {
+  let token = localStorage.getItem("token");
+  console.log("Token original:", token);
+
+  if (!token) {
+      console.error("Token não encontrado no localStorage.");
+      return;
   }
-  
-  // Chama a função após 4 segundos (4000 milissegundos) após o carregamento do site
-  setTimeout(minhaFuncao, 4000);
-  
-  minhaFuncao();
+
+  token = token.replace(/["']/g, ''); 
+  console.log("Token sem aspas:", token);
+
+  const urlAtual = window.location.href;
+  console.log("URL atual:", urlAtual);
+
+  const regex = /\/atendimento\/(\d+)/;
+  const match = urlAtual.match(regex);
+
+  if (match && match[1]) {
+      let id = match[1].replace(/\s+/g, ''); // Remove espaços do ID
+      console.log("ID capturado e filtrado da URL:", id);
+
+      const apiUrl = `https://chatapi.jetsalesbrasil.com/tickets/${id}?id=${id}`;
+      console.log("URL da API que será chamada:", apiUrl);
+
+      fetch(apiUrl, {
+          headers: {
+              "accept": "application/json, text/plain,/",
+              "authorization": `Bearer ${token}`
+          },
+          body: null,
+          method: "GET"
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`Erro na requisição: ${response.statusText}`);
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log("Resposta completa da API:", data);
+
+          if (data.contact && data.contact.pushname) {
+              const content = data.contact.pushname;
+
+              console.log("Nome do cliente: " + content);
+
+              const clientName = document.getElementById('clientName');
+              if (clientName) {
+                  clientName.innerText = `Cliente: ${content}`;
+                  console.log("Texto atualizado para: " + content);
+              } else {
+                  console.log('Elemento clientName não encontrado');
+              }
+          } else {
+              console.error("A chave 'contact.pushname' não foi encontrada na resposta.");
+          }
+      })
+      .catch(error => {
+          console.error('Houve um problema com a operação fetch:', error);
+      });
+  } else {
+      console.error('ID não encontrado na URL.');
+  }
+}
+
+// Função para observar mudanças na URL e chamar minhaFuncao se necessário
+function observarMudancaDeURL() {
+  let urlAnterior = window.location.href;
+
+  setInterval(() => {
+      const urlAtual = window.location.href;
+
+      // Verifica se a URL mudou
+      if (urlAnterior !== urlAtual) {
+          console.log("A URL mudou. Nova URL:", urlAtual);
+
+          // Chama a função minhaFuncao se a URL mudou
+          minhaFuncao();
+
+          // Atualiza a URL anterior
+          urlAnterior = urlAtual;
+      }
+  }, 1000); // Verifica a cada 1 segundo
+}
+
+
+// Inicia o observador de mudanças na URL
+observarMudancaDeURL();
+
+
 })();
