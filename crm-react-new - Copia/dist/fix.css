@@ -1,0 +1,112 @@
+/* Estilo padrão para desktop */
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid rgb(200, 200, 200);
+    margin: 0 0 20px 0;
+}
+
+
+
+#custom-container {
+    height: 100vh;
+    width: 500px;
+    background-color: rgb(30, 30, 30);
+    padding: 1px;
+    box-sizing: border-box;
+    border: 3px solid rgb(10, 15, 18);
+    border-radius: 12px;
+    overflow: auto;
+}
+
+#titulo-crm {
+    border-color: white;
+    text-align: center;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 54px;
+    padding: 5px;
+    background: radial-gradient(50% 50% at 50% 50%, #59ff10 0%, #64fe6d 36.94%, #67fd88 55.15%, #6afd9d 70.2%, #70fcd0 95.5%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#client-name-container {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #63636370;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#client-name {
+    color: white;
+    text-align: center;
+}
+
+.expandable-container {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    background-color: rgb(40, 40, 40);
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.toggle-buttonn {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #63636370;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    #custom-container {
+        width: 400px;
+    }
+
+    #titulo-crm {
+        font-size: 32px;
+        line-height: 44px;
+    }
+
+    .toggle-buttonn {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #custom-container {
+        width: 100%; 
+        padding: 5px;
+    }
+
+    #titulo-crm {
+        font-size: 28px;
+        line-height: 38px;
+    }
+
+    #client-name-container {
+        padding: 5px;
+    }
+
+    .toggle-buttonn {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
