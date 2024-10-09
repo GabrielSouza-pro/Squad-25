@@ -1,9 +1,8 @@
+import { createElement } from "react";
+
 // content.js
 console.log("JavaScript injetado em uma página!");
 
-
-
-(function() {
   // Cria a nova aba lateral
   const newElement = document.createElement('div');
   newElement.id = 'custom-container';  
@@ -473,4 +472,4 @@ function observarMudancaDeURL() {
 observarMudancaDeURL();
 
 
-})();
+
