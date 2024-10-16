@@ -7,11 +7,21 @@
     "default_popup": "index.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab",
+    "scripting",
+    "background",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "identity",
+    "identity.email",
+    "notifications"
   ],
   "host_permissions": [
     "https://chat.jetsalesbrasil.com/*",
-    "https://chatapi.jetsalesbrasil.com/*" 
+    "https://chatapi.jetsalesbrasil.com/*" ,
+    "https://crm.rdstation.com/*"
   ],
   "content_scripts": [
     {
