@@ -104,8 +104,15 @@ const sectionsList = [
   { id: 'produto_negociacoes', label: 'Produto das negociações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Produto das Negociações.'; return p; } },
   { id: 'produtos', label: 'Produtos', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Produtos.'; return p; } },
   { id: 'campos_personalizados', label: 'Campos personalizados', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Campos Personalizados.'; return p; } },
-  { id: 'funil_vendas', label: 'Funil de vendas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Funil de Vendas.'; return p; } }
+  { id: 'funil_vendas', label: 'Funil de vendas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Funil de Vendas.'; return p; } },
+  { id: 'etapas_funil_vendas', label: 'Etapas do funil de vendas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Etapas do Funil de Vendas.'; return p; } },
+  { id: 'tarefas', label: 'Tarefas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Tarefas.'; return p; } },
+  { id: 'anotacoes', label: 'Anotações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Anotações.'; return p; } },
+  { id: 'fontes', label: 'Fontes', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Fontes.'; return p; } },
+  { id: 'campanhas', label: 'Campanhas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Campanhas.'; return p; } },
+  { id: 'motivo_perda', label: 'Motivo da perda', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Motivo da Perda.'; return p; } }
 ];
+
 
 // 6. Função para injetar uma seção com conteúdo personalizado
 function injectSection(section, contentGenerator) {
