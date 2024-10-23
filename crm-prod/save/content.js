@@ -1,167 +1,89 @@
-// content.js
 console.log("JavaScript injetado em uma página!");
 
-// Função para criar contêineres expansíveis (não utilizada na versão final)
-function createExpandableSection(buttonText, contentText, sectionId) {
-  // ... código omitido para brevidade ...
+// 1. Criação da variável global 'user_idre'
+window.user_idre = null;
+
+// 2. Inicialização e monitoramento da variável 'numerodetell' com getter/setter
+let numerodetellValue = null;
+
+Object.defineProperty(window, 'numerodetell', {
+  get: function () {
+    return numerodetellValue;
+  },
+  set: function (value) {
+    if (numerodetellValue !== value) {
+      console.log(`numerodetell mudou de ${numerodetellValue} para ${value}`);
+      numerodetellValue = value;
+      handleNumerodetellChange(value); // Chama a função quando 'numerodetell' muda
+    }
+  },
+  configurable: true,
+  enumerable: true
+});
+
+// 3. Função para realizar a chamada à API quando 'numerodetell' muda
+function handleNumerodetellChange(newNumber) {
+  chrome.storage.local.get(['tokenrdsarion'], (result) => {
+    let tokenrdsarion = result.tokenrdsarion;
+    console.log("Token rdsarion:", tokenrdsarion);
+
+    if (!tokenrdsarion) {
+      console.error("tokenrdsarion não encontrado no chrome.storage.local.");
+      return;
+    }
+
+    const phone = newNumber;
+    const apiUrl = `https://crm.rdstation.com/api/v1/contacts?token=${tokenrdsarion}&phone=${phone}`;
+
+    const headers = {
+      "accept": "application/json"
+    };
+
+    chrome.runtime.sendMessage(
+      {
+        action: 'fetchData',
+        url: apiUrl,
+        headers: headers
+      },
+      (response) => {
+        if (response.success) {
+          const data = response.data;
+          console.log("Resposta da API:", data);
+          if (data.total > 0 && data.contacts && data.contacts.length > 0) {
+            const contact = data.contacts[0];
+            const contactId = contact._id;
+            if (contactId) {
+              window.user_idre = contactId;
+              console.log("user_idre atualizado para:", window.user_idre);
+            } else {
+              console.error("A chave '_id' não foi encontrada no contato.");
+            }
+          } else {
+            console.log("Nenhum contato encontrado.");
+          }
+        } else {
+          console.error('Houve um problema com a operação fetch:', response.error);
+        }
+      }
+    );
+  });
 }
 
-// Cria a nova aba lateral
-const newElement = document.createElement('div');
-newElement.id = 'custom-container';  
-
-// Cria o contêiner para o nome do cliente
-const clientNameContainer = document.createElement('div');
-clientNameContainer.id = 'client-name-container';
-
-const clientName = document.createElement('h2');
-clientName.innerText = 'Cliente:';
-clientName.style.color = 'white';
-clientName.style.textAlign = 'center';
-clientName.id = 'clientName';
-
-clientNameContainer.appendChild(clientName);
-newElement.appendChild(clientNameContainer);
-
-// Cria e adiciona o título CRM
-const titulocrm = document.createElement('h1');
-titulocrm.innerText = 'CRM';
-titulocrm.id = 'titulo-crm';
-
-newElement.appendChild(titulocrm);
-
-// Linha horizontal
-const hr = document.createElement('hr');
-newElement.appendChild(hr);
-
-// Lista de seções com conteúdo personalizado
-const sectionsList = [
-  { 
-    id: 'empresas', 
-    label: 'Empresas',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Empresas.';
-      return p;
-    }
-  },
-  { 
-    id: 'negociacoes', 
-    label: 'Negociações',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Negociações.';
-      return p;
-    }
-  },
-  { 
-    id: 'produto_negociacoes', 
-    label: 'Produto das negociações',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Produto das Negociações.';
-      return p;
-    }
-  },
-  { 
-    id: 'produtos', 
-    label: 'Produtos',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Produtos.';
-      return p;
-    }
-  },
-  { 
-    id: 'campos_personalizados', 
-    label: 'Campos personalizados',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Campos Personalizados.';
-      return p;
-    }
-  },
-  { 
-    id: 'funil_vendas', 
-    label: 'Funil de vendas',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Funil de Vendas.';
-      return p;
-    }
-  },
-  { 
-    id: 'etapas_funil_vendas', 
-    label: 'Etapas do funil de vendas',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Etapas do Funil de Vendas.';
-      return p;
-    }
-  },
-  { 
-    id: 'tarefas', 
-    label: 'Tarefas',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Tarefas.';
-      return p;
-    }
-  },
-  { 
-    id: 'anotacoes', 
-    label: 'Anotações',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Anotações.';
-      return p;
-    }
-  },
-  { 
-    id: 'fontes', 
-    label: 'Fontes',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Fontes.';
-      return p;
-    }
-  },
-  { 
-    id: 'campanhas', 
-    label: 'Campanhas',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Campanhas.';
-      return p;
-    }
-  },
-  { 
-    id: 'motivo_perda', 
-    label: 'Motivo da perda',
-    content: () => {
-      const p = document.createElement('p');
-      p.innerText = 'Conteúdo exclusivo para Motivo da Perda.';
-      return p;
-    }
-  }
-];
-
-
-// Função para injetar uma seção com conteúdo personalizado
-function injectSection(section, contentGenerator) {
+// 4. Função para criar contêineres expansíveis
+function createExpandableSection(buttonText, contentGenerator, sectionId) {
   const expandableContainer = document.createElement('div');
   expandableContainer.className = 'expandable-container';
-  expandableContainer.id = `${section.id}-container`;
+  expandableContainer.id = `${sectionId}-container`;
 
   const toggleButton = document.createElement('button');
-  toggleButton.innerText = section.label;
-  toggleButton.className = 'toggle-buttonn'; 
-  toggleButton.id = `${section.id}-button`;
+  toggleButton.innerText = buttonText;
+  toggleButton.className = 'toggle-buttonn';
+  toggleButton.id = `${sectionId}-button`;
 
   // Gera o conteúdo usando a função fornecida
   const content = contentGenerator();
   content.style.margin = '0';
-  content.id = `${section.id}-content`;
+  content.id = `${sectionId}-content`;
 
   // Adicione o conteúdo ao contêiner expansível
   expandableContainer.appendChild(content);
@@ -176,7 +98,28 @@ function injectSection(section, contentGenerator) {
   newElement.appendChild(expandableContainer);
 }
 
-// Função para injetar todas as seções habilitadas com conteúdo personalizado
+// 5. Lista de seções com conteúdo personalizado
+const sectionsList = [
+  { id: 'empresas', label: 'Empresas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Empresas.'; return p; } },
+  { id: 'negociacoes', label: 'Negociações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Negociações.'; return p; } },
+  { id: 'produto_negociacoes', label: 'Produto das negociações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Produto das Negociações.'; return p; } },
+  { id: 'produtos', label: 'Produtos', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Produtos.'; return p; } },
+  { id: 'campos_personalizados', label: 'Campos personalizados', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Campos Personalizados.'; return p; } },
+  { id: 'funil_vendas', label: 'Funil de vendas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Funil de Vendas.'; return p; } },
+  { id: 'etapas_funil_vendas', label: 'Etapas do funil de vendas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Etapas do Funil de Vendas.'; return p; } },
+  { id: 'tarefas', label: 'Tarefas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Tarefas.'; return p; } },
+  { id: 'anotacoes', label: 'Anotações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Anotações.'; return p; } },
+  { id: 'fontes', label: 'Fontes', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Fontes.'; return p; } },
+  { id: 'campanhas', label: 'Campanhas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Campanhas.'; return p; } },
+  { id: 'motivo_perda', label: 'Motivo da perda', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Motivo da Perda.'; return p; } }
+];
+
+// 6. Função para injetar uma seção com conteúdo personalizado
+function injectSection(section, contentGenerator) {
+  createExpandableSection(section.label, contentGenerator, section.id);
+}
+
+// 7. Função para injetar todas as seções habilitadas com conteúdo personalizado
 function injectSections(settings) {
   sectionsList.forEach(section => {
     if (settings[section.id]) { // Verifica se a seção está habilitada
@@ -185,12 +128,7 @@ function injectSections(settings) {
   });
 }
 
-// Funções auxiliares para adicionar elementos dinamicamente
-/**
- * Adiciona um parágrafo a uma seção específica.
- * @param {string} sectionId - ID da seção onde o parágrafo será adicionado.
- * @param {string} text - Texto do parágrafo.
- */
+// 8. Funções auxiliares para adicionar elementos dinamicamente
 function addParagraphToSection(sectionId, text) {
   const contentContainer = document.getElementById(`${sectionId}-content`);
   if (contentContainer) {
@@ -202,11 +140,6 @@ function addParagraphToSection(sectionId, text) {
   }
 }
 
-/**
- * Adiciona um elemento personalizado a uma seção específica.
- * @param {string} sectionId - ID da seção onde o elemento será adicionado.
- * @param {HTMLElement} element - Elemento DOM a ser adicionado.
- */
 function addElementToSection(sectionId, element) {
   const contentContainer = document.getElementById(`${sectionId}-content`);
   if (contentContainer) {
@@ -216,9 +149,8 @@ function addElementToSection(sectionId, element) {
   }
 }
 
-// Função para verificar o ID na URL e fazer a requisição para a API
+// 9. Função para verificar o ID na URL e fazer a requisição para a API
 function minhaFuncao() {
-  // Obter o token do localStorage da página
   let token = window.localStorage.getItem('token');
   console.log("Token original:", token);
 
@@ -227,7 +159,6 @@ function minhaFuncao() {
     return;
   }
 
-  // Remove aspas simples e duplas do token, se houver
   token = token.replace(/["']/g, '');
   console.log("Token sem aspas:", token);
 
@@ -238,7 +169,7 @@ function minhaFuncao() {
   const match = urlAtual.match(regex);
 
   if (match && match[1]) {
-    let id = match[1].replace(/\s+/g, ''); // Remove espaços do ID
+    let id = match[1].replace(/\s+/g, '');
     console.log("ID capturado e filtrado da URL:", id);
 
     const apiUrl = `https://chatapi.jetsalesbrasil.com/tickets/${id}?id=${id}`;
@@ -262,7 +193,6 @@ function minhaFuncao() {
 
       if (data.contact && data.contact.pushname) {
         const content = data.contact.pushname;
-
         console.log("Nome do cliente: " + content);
 
         const clientNameElement = document.getElementById('clientName');
@@ -275,6 +205,13 @@ function minhaFuncao() {
       } else {
         console.error("A chave 'contact.pushname' não foi encontrada na resposta.");
       }
+
+      if (data.contact && data.contact.number) {
+        window.numerodetell = data.contact.number;
+        console.log("Número do cliente armazenado em numerodetell:", window.numerodetell);
+      } else {
+        console.error("A chave 'contact.number' não foi encontrada na resposta.");
+      }
     })
     .catch(error => {
       console.error('Houve um problema com a operação fetch:', error);
@@ -284,44 +221,25 @@ function minhaFuncao() {
   }
 }
 
-// Função para observar mudanças na URL usando MutationObserver
+// 10. Função para observar mudanças na URL usando setInterval
 function observarMudancaDeURL() {
   let urlAnterior = window.location.href;
 
-  const observer = new MutationObserver(() => {
+  setInterval(() => {
     const urlAtual = window.location.href;
     if (urlAnterior !== urlAtual) {
       console.log("A URL mudou. Nova URL:", urlAtual);
       minhaFuncao();
-      initializeContent(); // Re-injetar seções com base nas novas configurações
       urlAnterior = urlAtual;
     }
-  });
+  }, 1000); // Verifica a cada 1000 milissegundos (1 segundo)
+} 
 
-  // Observa mudanças no elemento `<title>` que geralmente muda com a navegação SPA
-  const titleElement = document.querySelector('title');
-  if (titleElement) {
-    observer.observe(titleElement, { childList: true });
-  }
-
-  // Adiciona um listener para o evento 'popstate' caso a SPA use history API
-  window.addEventListener('popstate', () => {
-    const urlAtual = window.location.href;
-    if (urlAnterior !== urlAtual) {
-      console.log("A URL mudou via popstate. Nova URL:", urlAtual);
-      minhaFuncao();
-      initializeContent(); // Re-injetar seções com base nas novas configurações
-      urlAnterior = urlAtual;
-    }
-  });
-}
-
-// Função para inicializar o conteúdo com base nas configurações
+// 11. Função para inicializar o conteúdo com base nas configurações
 function initializeContent() {
   chrome.storage.local.get(['sectionSettings'], (result) => {
     let settings = result.sectionSettings;
     if (!settings) {
-      // Se nenhuma configuração encontrada, habilitar todas as seções por padrão
       settings = {};
       sectionsList.forEach(section => {
         settings[section.id] = true;
@@ -332,51 +250,58 @@ function initializeContent() {
   });
 }
 
-// Inicialização
-newElement.appendChild(document.createElement('div')); // Assegura que newElement tenha algum filho inicial
+// 12. Criação da nova aba lateral
+const newElement = document.createElement('div');
+newElement.id = 'custom-container';
+
+const clientNameContainer = document.createElement('div');
+clientNameContainer.id = 'client-name-container';
+
+const clientName = document.createElement('h2');
+clientName.innerText = 'Cliente:';
+clientName.style.color = 'white';
+clientName.style.textAlign = 'center';
+clientName.id = 'clientName';
+
+clientNameContainer.appendChild(clientName);
+newElement.appendChild(clientNameContainer);
+
+const titulocrm = document.createElement('h1');
+titulocrm.innerText = 'CRM';
+titulocrm.id = 'titulo-crm';
+
+newElement.appendChild(titulocrm);
+
+const hr = document.createElement('hr');
+newElement.appendChild(hr);
+
+newElement.appendChild(document.createElement('div'));
+
 document.body.appendChild(newElement);
-
-initializeContent();
-
-// Inicia o observador de mudanças na URL
 observarMudancaDeURL();
-
-// Chama a função inicialmente caso já esteja na URL desejada
+initializeContent();
 minhaFuncao();
 
-// Listener para mudanças nas configurações armazenadas
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'local' && changes.sectionSettings) {
-    const newSettings = changes.sectionSettings.newValue;
-    // Remove todas as seções atuais
-    sectionsList.forEach(section => {
-      const container = document.getElementById(`${section.id}-container`);
-      if (container) {
-        container.remove();
-      }
-      const button = document.getElementById(`${section.id}-button`);
-      if (button) {
-        button.remove();
-      }
-    });
-    // Injeta as seções com base nas novas configurações
-    injectSections(newSettings);
-  }
+  if (namespace === 'local') {
+    if (changes.sectionSettings) {
+      const newSettings = changes.sectionSettings.newValue;
+      sectionsList.forEach(section => {
+        const container = document.getElementById(`${section.id}-container`);
+        if (container) {
+          container.remove();
+        }
+        const button = document.getElementById(`${section.id}-button`);
+        if (button) { 
+          button.remove();
+        }
+      });
+      injectSections(newSettings);
+    }
 
-  // Atualiza o token se ele mudar
-  if (namespace === 'local' && changes.token) {
-    minhaFuncao();
+    if (changes.tokenrdsarion) {
+      console.log("Tokenrdsarion foi atualizado.");
+      minhaFuncao();
+    }
   }
 });
-
-// Exemplo de utilização das funções auxiliares (pode ser removido depois)
-/*
- // Adiciona um parágrafo à seção 'empresas'
- addParagraphToSection('empresas', 'Este é um parágrafo adicional para Empresas.');
- 
- // Adiciona um botão à seção 'negociacoes'
- const novoBotao = document.createElement('button');
- novoBotao.innerText = 'Novo Botão';
- novoBotao.addEventListener('click', () => alert('Novo botão clicado!'));
- addElementToSection('negociacoes', novoBotao);
- */
