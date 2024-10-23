@@ -68,6 +68,7 @@ function handleNumerodetellChange(newNumber) {
     );
   });
 }
+
 // 4. Função para criar contêineres expansíveis
 function createExpandableSection(buttonText, contentGenerator, sectionId) {
   const expandableContainer = document.createElement('div');
@@ -112,7 +113,6 @@ const sectionsList = [
   { id: 'campanhas', label: 'Campanhas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Campanhas.'; return p; } },
   { id: 'motivo_perda', label: 'Motivo da perda', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Motivo da Perda.'; return p; } }
 ];
-
 
 // 6. Função para injetar uma seção com conteúdo personalizado
 function injectSection(section, contentGenerator) {
@@ -221,35 +221,19 @@ function minhaFuncao() {
   }
 }
 
-// 10. Função para observar mudanças na URL usando MutationObserver
+// 10. Função para observar mudanças na URL usando setInterval
 function observarMudancaDeURL() {
   let urlAnterior = window.location.href;
 
-  const observer = new MutationObserver(() => {
+  setInterval(() => {
     const urlAtual = window.location.href;
     if (urlAnterior !== urlAtual) {
       console.log("A URL mudou. Nova URL:", urlAtual);
       minhaFuncao();
-      initializeContent();
       urlAnterior = urlAtual;
     }
-  });
-
-  const titleElement = document.querySelector('title');
-  if (titleElement) {
-    observer.observe(titleElement, { childList: true });
-  }
-
-  window.addEventListener('popstate', () => {
-    const urlAtual = window.location.href;
-    if (urlAnterior !== urlAtual) {
-      console.log("A URL mudou via popstate. Nova URL:", urlAtual);
-      minhaFuncao();
-      initializeContent();
-      urlAnterior = urlAtual;
-    }
-  });
-}
+  }, 1000); // Verifica a cada 1000 milissegundos (1 segundo)
+} 
 
 // 11. Função para inicializar o conteúdo com base nas configurações
 function initializeContent() {
@@ -294,9 +278,8 @@ newElement.appendChild(hr);
 newElement.appendChild(document.createElement('div'));
 
 document.body.appendChild(newElement);
-
-initializeContent();
 observarMudancaDeURL();
+initializeContent();
 minhaFuncao();
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
@@ -309,7 +292,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
           container.remove();
         }
         const button = document.getElementById(`${section.id}-button`);
-        if (button) {
+        if (button) { 
           button.remove();
         }
       });
