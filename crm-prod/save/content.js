@@ -1,11 +1,13 @@
+// ===== SEÇÃO 1: Inicialização e Definição de Propriedades =====
+
+// Log para confirmar a injeção do script
 console.log("JavaScript injetado em uma página!");
 
-// 1. Criação da variável global 'user_idre'
+// Definindo propriedades globais
 window.user_idre = null;
-
-// 2. Inicialização e monitoramento da variável 'numerodetell' com getter/setter
 let numerodetellValue = null;
 
+// Definindo getter e setter para a propriedade 'numerodetell'
 Object.defineProperty(window, 'numerodetell', {
   get: function () {
     return numerodetellValue;
@@ -14,15 +16,21 @@ Object.defineProperty(window, 'numerodetell', {
     if (numerodetellValue !== value) {
       console.log(`numerodetell mudou de ${numerodetellValue} para ${value}`);
       numerodetellValue = value;
-      handleNumerodetellChange(value); // Chama a função quando 'numerodetell' muda
+      handleNumerodetellChange(value); // Chama função para lidar com a mudança
     }
   },
   configurable: true,
   enumerable: true
 });
 
-// 3. Função para realizar a chamada à API quando 'numerodetell' muda
+// ===== SEÇÃO 2: Manipulação de Mudanças em 'numerodetell' =====
+
+/**
+ * Função para lidar com mudanças na propriedade 'numerodetell'
+ * @param {string} newNumber - Novo número atribuído a 'numerodetell'
+ */
 function handleNumerodetellChange(newNumber) {
+  // Obtém o token do Chrome Storage
   chrome.storage.local.get(['tokenrdsarion'], (result) => {
     let tokenrdsarion = result.tokenrdsarion;
     console.log("Token rdsarion:", tokenrdsarion);
@@ -39,6 +47,7 @@ function handleNumerodetellChange(newNumber) {
       "accept": "application/json"
     };
 
+    // Envia mensagem para o background script para fazer a requisição fetch
     chrome.runtime.sendMessage(
       {
         action: 'fetchData',
@@ -69,7 +78,14 @@ function handleNumerodetellChange(newNumber) {
   });
 }
 
-// 4. Função para criar contêineres expansíveis
+// ===== SEÇÃO 3: Criação de Seções Expansíveis =====
+
+/**
+ * Função para criar uma seção expansível na interface
+ * @param {string} buttonText - Texto do botão que expansão/contração
+ * @param {Function} contentGenerator - Função que gera o conteúdo da seção
+ * @param {string} sectionId - ID único para a seção
+ */
 function createExpandableSection(buttonText, contentGenerator, sectionId) {
   const expandableContainer = document.createElement('div');
   expandableContainer.className = 'expandable-container';
@@ -80,25 +96,158 @@ function createExpandableSection(buttonText, contentGenerator, sectionId) {
   toggleButton.className = 'toggle-buttonn';
   toggleButton.id = `${sectionId}-button`;
 
-  // Gera o conteúdo usando a função fornecida
   const content = contentGenerator();
   content.style.margin = '0';
   content.id = `${sectionId}-content`;
 
-  // Adicione o conteúdo ao contêiner expansível
   expandableContainer.appendChild(content);
 
-  // Adicione o listener para alternar a classe 'expanded'
+  // Evento para alternar a classe 'expanded' ao clicar no botão
   toggleButton.addEventListener('click', () => {
     expandableContainer.classList.toggle('expanded');
   });
 
-  // Adicione os elementos ao novo elemento principal
   newElement.appendChild(toggleButton);
   newElement.appendChild(expandableContainer);
 }
 
-// 5. Lista de seções com conteúdo personalizado
+// ===== SEÇÃO 4: Adicionando o Botão de Toggle do CRM =====
+
+/**
+ * Função para adicionar o botão de toggle do CRM na interface
+ */
+function adicionarBotaoToggle() {
+  const divAlvo = document.querySelector('div.q-gutter-sm.row.items-center.no-wrap');
+  if (!divAlvo) {
+    console.error('Div alvo não encontrada.');
+    return;
+  }
+
+  // Evita adicionar múltiplos botões
+  if (document.getElementById('botao-toggle-crm')) {
+    return;
+  }
+
+  const botaoToggle = document.createElement('button');
+  botaoToggle.id = 'botao-toggle-crm';
+  botaoToggle.className = 'q-btn q-btn-item non-selectable no-outline btn-rounded toggle-crm-btn q-btn--flat q-btn--round text-white q-btn--actionable q-focusable q-hoverable q-btn--wrap';
+  botaoToggle.innerHTML = `
+    <span class="q-focus-helper"></span>
+    <span class="q-btn__wrapper col row q-anchor--skip">
+      <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+        <i aria-hidden="true" role="img" class="q-icon mdi mdi-eye"> </i>
+      </span>
+    </span>
+  `;
+  botaoToggle.title = 'Mostrar/Ocultar CRM';
+
+  divAlvo.appendChild(botaoToggle);
+
+  // Evento de clique para mostrar ou ocultar o contêiner personalizado
+  botaoToggle.addEventListener('click', () => {
+    const customContainer = document.getElementById('custom-container');
+    if (!customContainer) {
+      console.error('#custom-container não encontrado.');
+      return;
+    }
+
+    customContainer.classList.toggle('visible');
+
+    if (customContainer.classList.contains('visible')) {
+      customContainer.style.display = 'block';
+      customContainer.style.width = '600px';
+      customContainer.style.height = '100vh';
+      customContainer.style.opacity = '1';
+    } else {
+      customContainer.style.display = 'none';
+      customContainer.style.width = '0px';
+      customContainer.style.height = '0px';
+      customContainer.style.opacity = '0';
+    }
+  });
+}
+
+// Adiciona o botão de toggle ao carregar o DOM
+document.addEventListener('DOMContentLoaded', adicionarBotaoToggle);
+
+// ===== SEÇÃO 5: Observador de Mutação no DOM =====
+
+// Observador para detectar mudanças no DOM e adicionar o botão de toggle se necessário
+const observer = new MutationObserver((mutations, obs) => {
+  const divAlvo = document.querySelector('div.q-gutter-sm.row.items-center.no-wrap');
+  if (divAlvo && !document.getElementById('botao-toggle-crm')) {
+    adicionarBotaoToggle();
+  }
+});
+observer.observe(document, { childList: true, subtree: true });
+
+// ===== SEÇÃO 6: Monitoramento do Modo Escuro =====
+
+/**
+ * Função para monitorar mudanças no modo escuro/claro da interface
+ */
+function monitorarModoEscuro() {
+  const divAlvo = document.querySelector('div.q-scrollarea');
+
+  if (!divAlvo) {
+    console.error('Div alvo para monitoramento não encontrada.');
+    return;
+  }
+
+  // Função para verificar e ativar o modo correspondente
+  const verificarModo = () => {
+    const isDark = divAlvo.classList.contains('q-scrollarea--dark');
+    if (isDark) {
+      ativarModoEscuro();
+    } else {
+      ativarModoClaro();
+    }
+  };
+
+  verificarModo();
+
+  // Observador para detectar mudanças nas classes da div alvo
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        verificarModo();
+      }
+    });
+  });
+
+  observer.observe(divAlvo, { attributes: true, attributeFilter: ['class'] });
+}
+
+/**
+ * Função para ativar o modo escuro na extensão
+ */
+function ativarModoEscuro() {
+  const customContainer = document.getElementById('custom-container');
+  if (customContainer && !customContainer.classList.contains('modo-escuro')) {
+    customContainer.classList.add('modo-escuro');
+    console.log('Modo Escuro ativado na extensão.');
+  }
+}
+
+/**
+ * Função para ativar o modo claro na extensão
+ */
+function ativarModoClaro() {
+  const customContainer = document.getElementById('custom-container');
+  if (customContainer && customContainer.classList.contains('modo-escuro')) {
+    customContainer.classList.remove('modo-escuro');
+    console.log('Modo Claro ativado na extensão.');
+  }
+}
+
+// Inicia o monitoramento do modo escuro ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+  monitorarModoEscuro();
+});
+
+// ===== SEÇÃO 7: Definição das Seções Personalizadas =====
+
+// Lista de seções com seus respectivos IDs, labels e geradores de conteúdo
 const sectionsList = [
   { id: 'empresas', label: 'Empresas', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Empresas.'; return p; } },
   { id: 'negociacoes', label: 'Negociações', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Negociações.'; return p; } },
@@ -114,21 +263,32 @@ const sectionsList = [
   { id: 'motivo_perda', label: 'Motivo da perda', content: () => { const p = document.createElement('p'); p.innerText = 'Conteúdo exclusivo para Motivo da Perda.'; return p; } }
 ];
 
-// 6. Função para injetar uma seção com conteúdo personalizado
+/**
+ * Função para injetar uma seção personalizada na interface
+ * @param {Object} section - Objeto representando a seção
+ * @param {Function} contentGenerator - Função que gera o conteúdo da seção
+ */
 function injectSection(section, contentGenerator) {
   createExpandableSection(section.label, contentGenerator, section.id);
 }
 
-// 7. Função para injetar todas as seções habilitadas com conteúdo personalizado
+/**
+ * Função para injetar múltiplas seções com base nas configurações
+ * @param {Object} settings - Configurações de ativação das seções
+ */
 function injectSections(settings) {
   sectionsList.forEach(section => {
-    if (settings[section.id]) { // Verifica se a seção está habilitada
+    if (settings[section.id]) {
       injectSection(section, section.content);
     }
   });
 }
 
-// 8. Funções auxiliares para adicionar elementos dinamicamente
+/**
+ * Função para adicionar um parágrafo a uma seção específica
+ * @param {string} sectionId - ID da seção
+ * @param {string} text - Texto do parágrafo
+ */
 function addParagraphToSection(sectionId, text) {
   const contentContainer = document.getElementById(`${sectionId}-content`);
   if (contentContainer) {
@@ -140,6 +300,11 @@ function addParagraphToSection(sectionId, text) {
   }
 }
 
+/**
+ * Função para adicionar um elemento HTML a uma seção específica
+ * @param {string} sectionId - ID da seção
+ * @param {HTMLElement} element - Elemento a ser adicionado
+ */
 function addElementToSection(sectionId, element) {
   const contentContainer = document.getElementById(`${sectionId}-content`);
   if (contentContainer) {
@@ -149,7 +314,11 @@ function addElementToSection(sectionId, element) {
   }
 }
 
-// 9. Função para verificar o ID na URL e fazer a requisição para a API
+// ===== SEÇÃO 8: Função Principal para Operações de API =====
+
+/**
+ * Função principal que realiza operações de API e atualiza a interface
+ */
 function minhaFuncao() {
   let token = window.localStorage.getItem('token');
   console.log("Token original:", token);
@@ -159,12 +328,14 @@ function minhaFuncao() {
     return;
   }
 
+  // Remove aspas do token
   token = token.replace(/["']/g, '');
   console.log("Token sem aspas:", token);
 
   const urlAtual = window.location.href;
   console.log("URL atual:", urlAtual);
 
+  // Expressão regular para capturar o ID da URL
   const regex = /\/atendimento\/(\d+)/;
   const match = urlAtual.match(regex);
 
@@ -175,6 +346,7 @@ function minhaFuncao() {
     const apiUrl = `https://chatapi.jetsalesbrasil.com/tickets/${id}?id=${id}`;
     console.log("URL da API que será chamada:", apiUrl);
 
+    // Realiza a requisição fetch para a API
     fetch(apiUrl, {
       headers: {
         "accept": "application/json, text/plain, */*",
@@ -191,6 +363,7 @@ function minhaFuncao() {
     .then(data => {
       console.log("Resposta completa da API:", data);
 
+      // Atualiza o nome do cliente na interface
       if (data.contact && data.contact.pushname) {
         const content = data.contact.pushname;
         console.log("Nome do cliente: " + content);
@@ -206,6 +379,7 @@ function minhaFuncao() {
         console.error("A chave 'contact.pushname' não foi encontrada na resposta.");
       }
 
+      // Atualiza o número do cliente na propriedade 'numerodetell'
       if (data.contact && data.contact.number) {
         window.numerodetell = data.contact.number;
         console.log("Número do cliente armazenado em numerodetell:", window.numerodetell);
@@ -221,7 +395,11 @@ function minhaFuncao() {
   }
 }
 
-// 10. Função para observar mudanças na URL usando setInterval
+// ===== SEÇÃO 9: Observador de Mudança de URL =====
+
+/**
+ * Função para observar mudanças na URL e executar ações quando a URL muda
+ */
 function observarMudancaDeURL() {
   let urlAnterior = window.location.href;
 
@@ -229,34 +407,43 @@ function observarMudancaDeURL() {
     const urlAtual = window.location.href;
     if (urlAnterior !== urlAtual) {
       console.log("A URL mudou. Nova URL:", urlAtual);
-      minhaFuncao();
+      minhaFuncao(); // Executa a função principal novamente
       urlAnterior = urlAtual;
     }
-  }, 1000); // Verifica a cada 1000 milissegundos (1 segundo)
-} 
+  }, 1000); // Verifica a cada segundo
+}
 
-// 11. Função para inicializar o conteúdo com base nas configurações
+// ===== SEÇÃO 10: Inicialização do Conteúdo Personalizado =====
+
+/**
+ * Função para inicializar o conteúdo personalizado com base nas configurações
+ */
 function initializeContent() {
   chrome.storage.local.get(['sectionSettings'], (result) => {
     let settings = result.sectionSettings;
     if (!settings) {
+      // Define todas as seções como ativas por padrão
       settings = {};
       sectionsList.forEach(section => {
         settings[section.id] = true;
       });
       chrome.storage.local.set({ sectionSettings: settings });
     }
-    injectSections(settings);
+    injectSections(settings); // Injeta as seções conforme as configurações
   });
 }
 
-// 12. Criação da nova aba lateral
+// ===== SEÇÃO 11: Criação do Contêiner Personalizado =====
+
+// Cria o contêiner principal personalizado
 const newElement = document.createElement('div');
 newElement.id = 'custom-container';
 
+// Cria o contêiner para o nome do cliente
 const clientNameContainer = document.createElement('div');
 clientNameContainer.id = 'client-name-container';
 
+// Cria o elemento para exibir o nome do cliente
 const clientName = document.createElement('h2');
 clientName.innerText = 'Cliente:';
 clientName.style.color = 'white';
@@ -266,27 +453,47 @@ clientName.id = 'clientName';
 clientNameContainer.appendChild(clientName);
 newElement.appendChild(clientNameContainer);
 
+// Cria o título do CRM
 const titulocrm = document.createElement('h1');
 titulocrm.innerText = 'CRM';
 titulocrm.id = 'titulo-crm';
 
 newElement.appendChild(titulocrm);
 
+// Adiciona uma linha horizontal
 const hr = document.createElement('hr');
 newElement.appendChild(hr);
 
+// Adiciona um contêiner vazio para futuras seções
 newElement.appendChild(document.createElement('div'));
 
+// Adiciona o contêiner personalizado ao corpo do documento
 document.body.appendChild(newElement);
+
+// ===== SEÇÃO 12: Inicialização e Execução das Funções Principais =====
+
+// Observa mudanças na URL
 observarMudancaDeURL();
+
+// Inicializa o conteúdo personalizado
 initializeContent();
+
+// Executa a função principal imediatamente
 minhaFuncao();
 
+// Verifica novamente o modo escuro/claro
+monitorarModoEscuro();
+
+// ===== SEÇÃO 13: Listener para Mudanças no Chrome Storage =====
+
+// Listener para detectar mudanças no armazenamento local do Chrome
 chrome.storage.onChanged.addListener((changes, namespace) => {
   if (namespace === 'local') {
+    // Verifica se houve mudanças nas configurações das seções
     if (changes.sectionSettings) {
       const newSettings = changes.sectionSettings.newValue;
       sectionsList.forEach(section => {
+        // Remove a seção existente
         const container = document.getElementById(`${section.id}-container`);
         if (container) {
           container.remove();
@@ -296,12 +503,14 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
           button.remove();
         }
       });
+      // Injeta as seções novamente conforme as novas configurações
       injectSections(newSettings);
     }
 
+    // Verifica se houve mudanças no 'tokenrdsarion'
     if (changes.tokenrdsarion) {
       console.log("Tokenrdsarion foi atualizado.");
-      minhaFuncao();
+      minhaFuncao(); // Re-executa a função principal para atualizar dados
     }
   }
 });
