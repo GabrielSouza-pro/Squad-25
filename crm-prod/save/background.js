@@ -1,11 +1,12 @@
-// background.js
-
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extensão CRM instalada!");
-  });
-  
-  // Você pode adicionar mais listeners ou funções aqui
-  chrome.action.onClicked.addListener((tab) => {
-    chrome.tabs.create({ url: 'index.html' }); // Abre o popup ao clicar no ícone
-  });
-  
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'fetchData') {
+    fetch(request.url, {
+      method: 'GET',
+      headers: request.headers
+    })
+    .then(response => response.json())
+    .then(data => sendResponse({ success: true, data }))
+    .catch(error => sendResponse({ success: false, error: error.message }));
+    return true; // Indica que a resposta será enviada de forma assíncrona
+  }
+});
