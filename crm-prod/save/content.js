@@ -116,55 +116,42 @@ function createExpandableSection(buttonText, contentGenerator, sectionId) {
 /**
  * Função para adicionar o botão de toggle do CRM na interface
  */
-function adicionarBotaoToggle() {
-  const divAlvo = document.querySelector('div.q-gutter-sm.row.items-center.no-wrap');
-  if (!divAlvo) {
-    console.error('Div alvo não encontrada.');
-    return;
+function adicionarBotaoToggle() { 
+  const divAlvo = document.querySelector('div.q-gutter-sm.row.items-center.no-wrap'); 
+  if (!divAlvo) { 
+    console.error('Div alvo não encontrada.'); 
+    return; 
   }
-
-  // Evita adicionar múltiplos botões
-  if (document.getElementById('botao-toggle-crm')) {
-    return;
+  // Evita adicionar múltiplos botões 
+  if (document.getElementById('botao-toggle-crm')) { 
+    return; 
   }
-
-  const botaoToggle = document.createElement('button');
-  botaoToggle.id = 'botao-toggle-crm';
-  botaoToggle.className = 'q-btn q-btn-item non-selectable no-outline btn-rounded toggle-crm-btn q-btn--flat q-btn--round text-white q-btn--actionable q-focusable q-hoverable q-btn--wrap';
+  
+  const botaoToggle = document.createElement('button'); 
+  botaoToggle.id = 'botao-toggle-crm'; 
+  botaoToggle.className = 'q-btn q-btn-item non-selectable no-outline btn-rounded toggle-crm-btn q-btn--flat q-btn--round text-white q-btn--actionable q-focusable q-hoverable q-btn--wrap'; 
   botaoToggle.innerHTML = `
-    <span class="q-focus-helper"></span>
-    <span class="q-btn__wrapper col row q-anchor--skip">
-      <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
-        <i aria-hidden="true" role="img" class="q-icon mdi mdi-eye"> </i>
-      </span>
-    </span>
-  `;
+    <span class="q-focus-helper"></span> 
+    <span class="q-btn__wrapper col row q-anchor--skip"> 
+      <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row"> 
+        <i aria-hidden="true" role="img" class="q-icon mdi mdi-eye"></i> 
+      </span> 
+    </span>`; 
   botaoToggle.title = 'Mostrar/Ocultar CRM';
-
-  divAlvo.appendChild(botaoToggle);
-
-  // Evento de clique para mostrar ou ocultar o contêiner personalizado
-  botaoToggle.addEventListener('click', () => {
-    const customContainer = document.getElementById('custom-container');
-    if (!customContainer) {
-      console.error('#custom-container não encontrado.');
-      return;
+  
+  // Utiliza prepend para inserir no início da div
+  divAlvo.prepend(botaoToggle);
+  
+  // Evento de clique para mostrar ou ocultar o contêiner personalizado 
+  botaoToggle.addEventListener('click', () => { 
+    const customContainer = document.getElementById('custom-container'); 
+    if (!customContainer) { 
+      console.error('#custom-container não encontrado.'); 
+      return; 
     }
-
-    customContainer.classList.toggle('visible');
-
-    if (customContainer.classList.contains('visible')) {
-      customContainer.style.display = 'block';
-      customContainer.style.width = '600px';
-      customContainer.style.height = '100vh';
-      customContainer.style.opacity = '1';
-    } else {
-      customContainer.style.display = 'none';
-      customContainer.style.width = '0px';
-      customContainer.style.height = '0px';
-      customContainer.style.opacity = '0';
-    }
-  });
+    
+    customContainer.classList.toggle('visible'); // Alterna a classe 'visible'
+  }); 
 }
 
 // Adiciona o botão de toggle ao carregar o DOM
@@ -227,6 +214,15 @@ function ativarModoEscuro() {
     customContainer.classList.add('modo-escuro');
     console.log('Modo Escuro ativado na extensão.');
   }
+
+  // Atualiza a cor do botão de toggle para o modo escuro
+  const botaoToggle = document.getElementById('botao-toggle-crm');
+  if (botaoToggle) {
+    // Mantém a cor atual ou define uma cor específica para o modo escuro
+    botaoToggle.style.backgroundColor = '#444444'; // Cor padrão no modo escuro
+    // Opcional: Atualiza a cor do ícone se necessário
+    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
+  }
 }
 
 /**
@@ -238,8 +234,15 @@ function ativarModoClaro() {
     customContainer.classList.remove('modo-escuro');
     console.log('Modo Claro ativado na extensão.');
   }
-}
 
+  // Atualiza a cor do botão de toggle para o modo claro
+  const botaoToggle = document.getElementById('botao-toggle-crm');
+  if (botaoToggle) {
+    botaoToggle.style.backgroundColor = 'rgb(5,78,142)'; // Cor especificada para o modo claro
+    // Opcional: Atualiza a cor do ícone se necessário
+    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
+  }
+}
 // Inicia o monitoramento do modo escuro ao carregar o DOM
 document.addEventListener('DOMContentLoaded', () => {
   monitorarModoEscuro();
