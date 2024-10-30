@@ -1,23 +1,30 @@
 body {
     display: flex;
     flex-direction: row;
+    background-color: #1e1e1e; /* Cor de fundo escura */
+    color: #ffffff; /* Texto branco */
+    margin: 0;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 hr {
     border: none;
-    border-top: 2px solid rgb(200, 200, 200);
-    margin: 0 0 20px 0;
+    border-top: 2px solid #394049; /* Cor do site */
+    margin: 20px 0;
 }
 
 #custom-container {
-    height: 100vh;
-    width: 600px; /* Largura padrão */
-    background-color: rgb(30, 30, 30);
+    height: 0px;
+    width: 0px; /* Largura padrão */
+    background-color: #2a2a2a; /* Cor de fundo escura do contêiner */
     padding: 1px;
     box-sizing: border-box;
     border: 3px solid rgb(10, 15, 18);
     border-radius: 12px;
     overflow: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+    opacity: '0';
+    display: none;
 }
 
 #titulo-crm {
@@ -135,3 +142,54 @@ hr {
         padding: 6px;
     }
 }
+
+/* 14. Estilos para modo escuro */
+#custom-container.modo-escuro {
+    background-color: #1e1e1e; /* Fundo escuro */
+    color: #ffffff; /* Texto branco */
+    /* Adicione outras propriedades de estilo conforme necessário */
+  }
+  
+  #custom-container.modo-escuro #titulo-crm {
+    /* Se quiser alterar o estilo do título no modo escuro */
+    border-color: white;
+    text-align: center;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 54px;
+    padding: 5px;
+    background: radial-gradient(50% 50% at 50% 50%, #59ff10 0%, #64fe6d 36.94%, #67fd88 55.15%, #6afd9d 70.2%, #70fcd0 95.5%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  #custom-container.modo-escuro .toggle-buttonn {
+    background-color: #444444; /* Altere para uma cor adequada para o modo escuro */
+    color: #ffffff;
+  }
+
+  #custom-container.modo-escuro #client-name-container{
+    background-color: #63636370;
+  }
+  /* Estilos para modo claro (opção padrão, caso precise ajustar) */
+  #custom-container {
+    background-color: #ffffff; /* Fundo claro */
+    color: #000000; /* Texto preto */
+    /* Adicione outras propriedades de estilo conforme necessário */
+    border: whitesmoke;
+  }
+  #custom-container #client-name-container{
+    background-color:#054E8E ;
+  }
+  
+  #custom-container #titulo-crm {
+    /* Estilos para o título no modo claro */
+    background: none; /* Remova ou ajuste conforme necessário */
+    -webkit-text-fill-color: #000000; /* Texto preto */
+  }
+  
+  #custom-container .toggle-buttonn {
+    background-color:#054E8E ;
+  }
