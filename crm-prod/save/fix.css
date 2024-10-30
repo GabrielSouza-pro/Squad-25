@@ -1,195 +1,208 @@
-body {
-    display: flex;
-    flex-direction: row;
-    background-color: #1e1e1e; /* Cor de fundo escura */
-    color: #ffffff; /* Texto branco */
-    margin: 0;
-    font-family: 'Noto Sans', sans-serif;
-}
+body { 
+    display: flex; 
+    flex-direction: row; 
+    background-color: #1e1e1e; 
+    color: #ffffff; 
+    margin: 0; 
+    font-family: 'Noto Sans', sans-serif; 
+  }
+  
+  hr { 
+    border: none; 
+    border-top: 2px solid #394049; 
+    margin: 20px 0; 
+  }
+  
+  #custom-container { 
+    height: 0px; 
+    width: 0px; 
+    background-color: #2a2a2a; 
+    padding: 1px; 
+    box-sizing: border-box; 
+    border: 3px solid rgb(10, 15, 18); 
+    border-radius: 12px; 
+    overflow: hidden; 
+    opacity: 0; 
+    visibility: hidden; /* Inicialmente oculto */
+    transition: width 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+  }
+  
+  #custom-container.visible { 
+    visibility: visible; /* Torna visível quando ativo */
+    width: 600px; 
+    height: 100vh; 
+    opacity: 1; 
+  }
+  
+  #titulo-crm { 
+    border-color: white; 
+    text-align: center; 
+    font-family: 'Noto Sans', sans-serif; 
+    font-weight: 400; 
+    font-size: 40px; 
+    line-height: 54px; 
+    padding: 5px; 
+    background: #2a2f35; 
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+  }
+  
+  #client-name-container { 
+    width: 100%; 
+    margin-bottom: 20px; 
+    padding: 10px; 
+    background-color: #63636370; 
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px; 
+  }
+  
+  #client-name { 
+    color: white; 
+    text-align: center; 
+  }
+  
+  .expandable-container { 
+    overflow: hidden; 
+    max-height: 0; 
+    opacity: 0; 
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out; 
+    background-color: rgb(40, 40, 40); 
+    padding: 10px; 
+    box-sizing: border-box; 
+    border-radius: 8px; 
+  }
+  
+  .expandable-container.expanded { 
+    max-height: 500px; 
+    opacity: 1; 
+  }
+  
+  .toggle-buttonn { 
+    margin-bottom: 10px; 
+    width: 100%; 
+    padding: 10px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #63636370; 
+    color: white; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease, color 0.3s ease; /* Adiciona transições para hover, etc. */
+  }
+  
+  .toggle-buttonn:hover { 
+    background-color: #50505070; 
+  }
 
-hr {
-    border: none;
-    border-top: 2px solid #394049; /* Cor do site */
-    margin: 20px 0;
-}
-
-#custom-container {
-    height: 0px;
-    width: 0px; /* Largura padrão */
-    background-color: #2a2a2a; /* Cor de fundo escura do contêiner */
-    padding: 1px;
-    box-sizing: border-box;
-    border: 3px solid rgb(10, 15, 18);
-    border-radius: 12px;
-    overflow: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
-    opacity: '0';
-    display: none;
-}
-
-#titulo-crm {
-    border-color: white;
-    text-align: center;
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 54px;
-    padding: 5px;
-    background: radial-gradient(50% 50% at 50% 50%, #59ff10 0%, #64fe6d 36.94%, #67fd88 55.15%, #6afd9d 70.2%, #70fcd0 95.5%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-#client-name-container {
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #63636370;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-#client-name {
-    color: white;
-    text-align: center;
-}
-
-.expandable-container {
-    overflow: hidden;
-    max-height: 0;
-    opacity: 0;
-    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
-    background-color: rgb(40, 40, 40);
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 8px;
-}
-
-.expandable-container.expanded {
-    max-height: 500px; /* Ajuste conforme a quantidade de conteúdo esperado */
-    opacity: 1;
-}
-
-.toggle-buttonn {
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #63636370;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* Responsividade */
-@media screen and (max-width: 1200px) {
-    #custom-container {
-        width: 500px; /* Largura para telas médias */
-    }
-}
-
-@media screen and (max-width: 992px) {
-    #custom-container {
-        width: 400px; /* Largura para telas pequenas */
-    }
-
+  
+  /* Responsividade */
+  @media screen and (max-width: 1200px) { 
+    #custom-container.visible { 
+      width: 500px; 
+    } 
+  }
+  
+  @media screen and (max-width: 992px) { 
+    #custom-container.visible { 
+      width: 400px; 
+    } 
+  
     #titulo-crm {
-        font-size: 36px;
-        line-height: 48px;
+      font-size: 36px;
+      line-height: 48px;
     }
-
+  
     .toggle-buttonn {
-        font-size: 14px;
-        padding: 8px;
+      font-size: 14px;
+      padding: 8px;
     }
-}
-
-@media screen and (max-width: 768px) {
-    #custom-container {
-        width: 300px; /* Largura para telas muito pequenas */
-    }
-
+  }
+  
+  @media screen and (max-width: 768px) { 
+    #custom-container.visible { 
+      width: 300px; 
+    } 
+  
     #titulo-crm {
-        font-size: 32px;
-        line-height: 42px;
+      font-size: 32px;
+      line-height: 42px;
     }
-
+  
     .toggle-buttonn {
-        font-size: 14px;
-        padding: 8px;
+      font-size: 14px;
+      padding: 8px;
     }
-}
-
-@media screen and (max-width: 480px) {
-    #custom-container {
-        width: 100%; 
-        padding: 5px;
-    }
-
+  }
+  
+  @media screen and (max-width: 480px) { 
+    #custom-container.visible { 
+      width: 100%; 
+      padding: 5px; 
+    } 
+  
     #titulo-crm {
-        font-size: 28px;
-        line-height: 38px;
+      font-size: 28px;
+      line-height: 38px;
     }
-
+  
     #client-name-container {
-        padding: 5px;
+      padding: 5px;
     }
-
+  
     .toggle-buttonn {
-        font-size: 12px;
-        padding: 6px;
+      font-size: 12px;
+      padding: 6px;
     }
-}
-
-/* 14. Estilos para modo escuro */
-#custom-container.modo-escuro {
-    background-color: #1e1e1e; /* Fundo escuro */
-    color: #ffffff; /* Texto branco */
-    /* Adicione outras propriedades de estilo conforme necessário */
   }
   
-  #custom-container.modo-escuro #titulo-crm {
-    /* Se quiser alterar o estilo do título no modo escuro */
-    border-color: white;
-    text-align: center;
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: 400;
-    font-size: 40px;
-    line-height: 54px;
-    padding: 5px;
+  /* Estilos para modo escuro */
+  #custom-container.modo-escuro { 
+    background-color: #1e1e1e; 
+    color: #ffffff; 
+  }
+  
+  #custom-container.modo-escuro #titulo-crm { 
+    border-color: white; 
+    text-align: center; 
+    font-family: 'Noto Sans', sans-serif; 
+    font-weight: 400; 
+    font-size: 40px; 
+    line-height: 54px; 
+    padding: 5px; 
     background: radial-gradient(50% 50% at 50% 50%, #59ff10 0%, #64fe6d 36.94%, #67fd88 55.15%, #6afd9d 70.2%, #70fcd0 95.5%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    -webkit-text-fill-color: transparent; 
   }
   
-  #custom-container.modo-escuro .toggle-buttonn {
-    background-color: #444444; /* Altere para uma cor adequada para o modo escuro */
-    color: #ffffff;
-  }
-
-  #custom-container.modo-escuro #client-name-container{
-    background-color: #63636370;
-  }
-  /* Estilos para modo claro (opção padrão, caso precise ajustar) */
-  #custom-container {
-    background-color: #ffffff; /* Fundo claro */
-    color: #000000; /* Texto preto */
-    /* Adicione outras propriedades de estilo conforme necessário */
-    border: whitesmoke;
-  }
-  #custom-container #client-name-container{
-    background-color:#054E8E ;
+  #custom-container.modo-escuro .toggle-buttonn { 
+    background-color: #444444; 
+    color: #ffffff; 
   }
   
-  #custom-container #titulo-crm {
-    /* Estilos para o título no modo claro */
-    background: none; /* Remova ou ajuste conforme necessário */
-    -webkit-text-fill-color: #000000; /* Texto preto */
+  #custom-container.modo-escuro #client-name-container { 
+    background-color: #63636370; 
   }
   
-  #custom-container .toggle-buttonn {
-    background-color:#054E8E ;
+  #custom-container.modo-escuro .expandable-container { 
+    background-color: rgb(40, 40, 40); 
+  }
+  
+  /* Estilos para modo claro (opção padrão) */
+  #custom-container { 
+    border: whitesmoke; 
+    background-color: white;
+  }
+  
+  #custom-container #client-name-container { 
+    background-color: #054E8E; 
+  }
+  
+  #custom-container .toggle-buttonn { 
+    background-color: #054E8E; 
+  }
+  
+  #custom-container .expandable-container { 
+    background-color: whitesmoke; 
   }
