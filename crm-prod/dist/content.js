@@ -82,7 +82,7 @@ function handleNumerodetellChange(newNumber) {
 
 /**
  * Função para criar uma seção expansível na interface
- * @param {string} buttonText - Texto do botão que expansão/contração
+ * @param {string} buttonText - Texto do botão que expande/contrai
  * @param {Function} contentGenerator - Função que gera o conteúdo da seção
  * @param {string} sectionId - ID único para a seção
  */
@@ -152,6 +152,52 @@ function adicionarBotaoToggle() {
     
     customContainer.classList.toggle('visible'); // Alterna a classe 'visible'
   }); 
+
+  // Definindo a cor inicial do botão com base no modo atual
+  atualizarCorBotaoToggle();
+
+  // Verifica o modo a cada 0.05 segundos e atualiza a cor do botão
+  setInterval(atualizarCorBotaoToggle, 50);
+}
+
+/**
+ * Função para verificar o modo atual e atualizar a cor do botão de toggle
+ */
+function atualizarCorBotaoToggle() {
+  const divModo = document.querySelector('div.q-scrollarea');
+  if (!divModo) {
+    console.error('Div alvo para detecção de modo não encontrada.');
+    return;
+  }
+
+  const isDark = divModo.classList.contains('q-scrollarea--dark');
+  const botaoToggle = document.getElementById('botao-toggle-crm');
+  const customContainer = document.getElementById('custom-container');
+
+  if (!botaoToggle) {
+    console.error('Botão toggle não encontrado.');
+    return;
+  }
+
+  if (isDark) {
+    // Modo Escuro
+    botaoToggle.style.backgroundColor = '#444444'; // Cor no modo escuro
+    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
+
+    // Adiciona a classe 'modo-escuro' ao custom-container
+    if (customContainer) {
+      customContainer.classList.add('modo-escuro');
+    }
+  } else {
+    // Modo Claro
+    botaoToggle.style.backgroundColor = 'rgb(5,78,142)'; // Cor no modo claro
+    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
+
+    // Remove a classe 'modo-escuro' do custom-container
+    if (customContainer) {
+      customContainer.classList.remove('modo-escuro');
+    }
+  }
 }
 
 // Adiciona o botão de toggle ao carregar o DOM
@@ -167,86 +213,6 @@ const observer = new MutationObserver((mutations, obs) => {
   }
 });
 observer.observe(document, { childList: true, subtree: true });
-
-// ===== SEÇÃO 6: Monitoramento do Modo Escuro =====
-
-/**
- * Função para monitorar mudanças no modo escuro/claro da interface
- */
-function monitorarModoEscuro() {
-  const divAlvo = document.querySelector('div.q-scrollarea');
-
-  if (!divAlvo) {
-    console.error('Div alvo para monitoramento não encontrada.');
-    return;
-  }
-
-  // Função para verificar e ativar o modo correspondente
-  const verificarModo = () => {
-    const isDark = divAlvo.classList.contains('q-scrollarea--dark');
-    if (isDark) {
-      ativarModoEscuro();
-    } else {
-      ativarModoClaro();
-    }
-  };
-
-  verificarModo();
-
-  // Observador para detectar mudanças nas classes da div alvo
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        verificarModo();
-      }
-    });
-  });
-
-  observer.observe(divAlvo, { attributes: true, attributeFilter: ['class'] });
-}
-
-/**
- * Função para ativar o modo escuro na extensão
- */
-function ativarModoEscuro() {
-  const customContainer = document.getElementById('custom-container');
-  if (customContainer && !customContainer.classList.contains('modo-escuro')) {
-    customContainer.classList.add('modo-escuro');
-    console.log('Modo Escuro ativado na extensão.');
-  }
-
-  // Atualiza a cor do botão de toggle para o modo escuro
-  const botaoToggle = document.getElementById('botao-toggle-crm');
-  if (botaoToggle) {
-    // Mantém a cor atual ou define uma cor específica para o modo escuro
-    botaoToggle.style.backgroundColor = '#444444'; // Cor padrão no modo escuro
-    // Opcional: Atualiza a cor do ícone se necessário
-    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
-  }
-}
-
-/**
- * Função para ativar o modo claro na extensão
- */
-function ativarModoClaro() {
-  const customContainer = document.getElementById('custom-container');
-  if (customContainer && customContainer.classList.contains('modo-escuro')) {
-    customContainer.classList.remove('modo-escuro');
-    console.log('Modo Claro ativado na extensão.');
-  }
-
-  // Atualiza a cor do botão de toggle para o modo claro
-  const botaoToggle = document.getElementById('botao-toggle-crm');
-  if (botaoToggle) {
-    botaoToggle.style.backgroundColor = 'rgb(5,78,142)'; // Cor especificada para o modo claro
-    // Opcional: Atualiza a cor do ícone se necessário
-    botaoToggle.querySelector('.q-icon').style.color = '#ffffff';
-  }
-}
-// Inicia o monitoramento do modo escuro ao carregar o DOM
-document.addEventListener('DOMContentLoaded', () => {
-  monitorarModoEscuro();
-});
 
 // ===== SEÇÃO 7: Definição das Seções Personalizadas =====
 
@@ -483,9 +449,6 @@ initializeContent();
 
 // Executa a função principal imediatamente
 minhaFuncao();
-
-// Verifica novamente o modo escuro/claro
-monitorarModoEscuro();
 
 // ===== SEÇÃO 13: Listener para Mudanças no Chrome Storage =====
 
