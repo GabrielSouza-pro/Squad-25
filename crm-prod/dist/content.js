@@ -480,3 +480,22 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     }
   }
 });
+
+// ===== SEÇÃO 14: Listener para Cliques nos Divs de Tickets =====
+
+/**
+ * Listener para detectar cliques nos divs de tickets
+ * e tornar o custom-container visível
+ */
+document.addEventListener('click', function(e) {
+  // Verifica se o alvo do clique ou algum de seus ancestrais possui a classe 'ticketBorder'
+  if (e.target.closest('.ticketBorder')) {
+    const customContainer = document.getElementById('custom-container');
+    if (customContainer) {
+      customContainer.classList.add('visible'); // Adiciona a classe 'visible'
+      console.log("'visible' class adicionada ao custom-container devido ao clique em um ticket.");
+    } else {
+      console.error("'custom-container' não encontrado.");
+    }
+  }
+});
