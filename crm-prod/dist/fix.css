@@ -32,6 +32,7 @@ hr {
   width: 600px; 
   height: 100vh; 
   opacity: 1; 
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease, padding 0.5s ease;
 }
 
 #titulo-crm { 
