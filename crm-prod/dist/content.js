@@ -181,7 +181,7 @@ function createExpandableSection(buttonText, contentGenerator, sectionId) {
 
   const toggleButton = document.createElement('button');
   toggleButton.innerText = buttonText;
-  toggleButton.className = 'toggle-button';
+  toggleButton.className = 'toggle-buttonn';
   toggleButton.id = `${sectionId}-button`;
 
   const content = contentGenerator();
@@ -217,7 +217,7 @@ function adicionarBotaoToggle() {
   
   const botaoToggle = document.createElement('button'); 
   botaoToggle.id = 'botao-toggle-crm'; 
-  botaoToggle.className = 'q-btn q-btn-item non-selectable no-outline btn-rounded toggle-crm-btn q-btn--flat q-btn--round text-white q-btn--actionable q-focusable q-hoverable q-btn--wrap'; 
+  botaoToggle.className = 'q-btn q-btn-item non-selectable no-outline btn-rounded toggle-button q-btn--flat q-btn--round text-white q-btn--actionable q-focusable q-hoverable q-btn--wrap'; 
   botaoToggle.innerHTML = `
     <span class="q-focus-helper"></span> 
     <span class="q-btn__wrapper col row q-anchor--skip"> 
@@ -594,44 +594,3 @@ document.addEventListener('click', function(e) {
     }
   }
 });
-
-// ===== SEÇÃO 14: Funções para Criação das Seções Personalizadas =====
-
-/**
- * Função para injetar uma seção personalizada na interface
- * @param {Object} section - Objeto representando a seção
- * @param {Function} contentGenerator - Função que gera o conteúdo da seção
- */
-function injectSection(section, contentGenerator) {
-  createExpandableSection(section.label, contentGenerator, section.id);
-}
-
-/**
- * Função para criar uma seção expansível
- * @param {string} label - Rótulo da seção
- * @param {Function} contentGenerator - Função que gera o conteúdo
- * @param {string} id - ID único da seção
- */
-function createExpandableSection(label, contentGenerator, id) {
-  const sectionContainer = document.createElement('div');
-  sectionContainer.className = 'section-container';
-
-  const sectionHeader = document.createElement('div');
-  sectionHeader.className = 'section-header';
-  sectionHeader.innerText = label;
-
-  const sectionContent = document.createElement('div');
-  sectionContent.className = 'section-content';
-  sectionContent.style.display = 'none'; // Esconde o conteúdo por padrão
-  sectionContent.appendChild(contentGenerator());
-
-  sectionHeader.addEventListener('click', () => {
-    const isVisible = sectionContent.style.display === 'block';
-    sectionContent.style.display = isVisible ? 'none' : 'block';
-  });
-
-  sectionContainer.appendChild(sectionHeader);
-  sectionContainer.appendChild(sectionContent);
-
-  newElement.appendChild(sectionContainer);
-}
