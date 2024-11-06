@@ -5,6 +5,7 @@ console.log("JavaScript injetado em uma página!");
 
 // Definindo propriedades globais
 window.user_idre = null;
+window.deals_idre = ''; // Alterado de array para string
 let numerodetellValue = null;
 
 // Definindo getter e setter para a propriedade 'numerodetell'
@@ -55,7 +56,7 @@ function handleNumerodetellChange(newNumber) {
         headers: headers
       },
       (response) => {
-        if (response.success) {
+        if (response && response.success) { // Safe check
           const data = response.data;
           console.log("Resposta da API:", data);
           if (data.total > 0 && data.contacts && data.contacts.length > 0) {
@@ -67,15 +68,102 @@ function handleNumerodetellChange(newNumber) {
             } else {
               console.error("A chave '_id' não foi encontrada no contato.");
             }
+
+            // Verifica e extrai os IDs dos deals
+            if (contact.deals && contact.deals.length > 0) {
+              window.deals_idre = contact.deals.map(deal => deal.id || deal._id).join(', '); // Convertido para string
+              console.log("deals_idre atualizado para:", window.deals_idre);
+              
+              // Após obter os deal_id, realiza a requisição adicional para cada deal
+              const dealIds = window.deals_idre.split(',').map(id => id.trim());
+              dealIds.forEach(dealId => {
+                if (dealId) {
+                  fetchDealDetails(tokenrdsarion, dealId);
+                }
+              });
+              
+            } else {
+              console.log("Nenhum deal encontrado para o contato.");
+              window.deals_idre = ''; // Limpa a variável caso não haja deals
+            }
           } else {
             console.log("Nenhum contato encontrado.");
+            window.user_idre = null;
+            window.deals_idre = '';
           }
         } else {
-          console.error('Houve um problema com a operação fetch:', response.error);
+          console.error('Houve um problema com a operação fetch:', response ? response.error : 'No response');
         }
       }
     );
   });
+}
+
+/**
+ * Função para buscar detalhes de um deal específico
+ * @param {string} token - Token do RD Station
+ * @param {string} dealId - ID do deal
+ */
+function fetchDealDetails(token, dealId) {
+  // Corrigindo o parâmetro da API para 'deal_id' se necessário
+  const apiUrl = `https://crm.rdstation.com/api/v1/deals?token=${token}&deal_id=${dealId}`;
+  const headers = {
+    "accept": "application/json"
+  };
+
+  chrome.runtime.sendMessage(
+    {
+      action: 'fetchDeals',
+      url: apiUrl,
+      headers: headers
+    },
+    (response) => {
+      if (response && response.success) { // Safe check
+        const dealData = response.data;
+        console.log(`Detalhes do Deal (${dealId}):`, dealData);
+        // Aqui você pode manipular os dados do deal conforme necessário,
+        // como atualizar a interface do usuário ou armazenar os dados.
+
+        // Após obter os detalhes do deal, buscar os produtos associados a ele
+        if (dealId && token) {
+          fetchDealProducts(token, dealId);
+        }
+
+      } else {
+        console.error(`Erro ao buscar detalhes do Deal (${dealId}):`, response ? response.error : 'No response');
+      }
+    }
+  );
+}
+
+/**
+ * Função para buscar produtos de um deal específico
+ * @param {string} token - Token do RD Station
+ * @param {string} dealId - ID do deal
+ */
+function fetchDealProducts(token, dealId) {
+  const apiUrl = `https://crm.rdstation.com/api/v1/deals/${dealId}/deal_products?token=${token}`;
+  const headers = {
+    "accept": "application/json"
+  };
+
+  chrome.runtime.sendMessage(
+    {
+      action: 'fetchDealProducts',
+      url: apiUrl,
+      headers: headers
+    },
+    (response) => {
+      if (response && response.success) { // Safe check
+        const dealProducts = response.data;
+        console.log(`Produtos do Deal (${dealId}):`, dealProducts);
+        // Aqui você pode manipular os dados dos produtos conforme necessário,
+        // como atualizar a interface do usuário ou armazenar os dados.
+      } else {
+        console.error(`Erro ao buscar produtos do Deal (${dealId}):`, response ? response.error : 'No response');
+      }
+    }
+  );
 }
 
 // ===== SEÇÃO 3: Criação de Seções Expansíveis =====
@@ -93,7 +181,7 @@ function createExpandableSection(buttonText, contentGenerator, sectionId) {
 
   const toggleButton = document.createElement('button');
   toggleButton.innerText = buttonText;
-  toggleButton.className = 'toggle-buttonn';
+  toggleButton.className = 'toggle-button';
   toggleButton.id = `${sectionId}-button`;
 
   const content = contentGenerator();
@@ -151,6 +239,7 @@ function adicionarBotaoToggle() {
     }
     
     customContainer.classList.toggle('visible'); // Alterna a classe 'visible'
+    customContainer.style.display = customContainer.classList.contains('visible') ? 'block' : 'none';
   }); 
 
   // Definindo a cor inicial do botão com base no modo atual
@@ -407,6 +496,7 @@ function initializeContent() {
 // Cria o contêiner principal personalizado
 const newElement = document.createElement('div');
 newElement.id = 'custom-container';
+newElement.className = 'custom-container'; // Adiciona uma classe para estilização
 
 // Cria o contêiner para o nome do cliente
 const clientNameContainer = document.createElement('div');
@@ -426,6 +516,7 @@ newElement.appendChild(clientNameContainer);
 const titulocrm = document.createElement('h1');
 titulocrm.innerText = 'CRM';
 titulocrm.id = 'titulo-crm';
+titulocrm.style.color = 'white'; // Ajusta a cor para melhor visibilidade
 
 newElement.appendChild(titulocrm);
 
@@ -435,6 +526,9 @@ newElement.appendChild(hr);
 
 // Adiciona um contêiner vazio para futuras seções
 newElement.appendChild(document.createElement('div'));
+
+// Esconde o contêiner por padrão
+newElement.style.display = 'none';
 
 // Adiciona o contêiner personalizado ao corpo do documento
 document.body.appendChild(newElement);
@@ -476,7 +570,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     // Verifica se houve mudanças no 'tokenrdsarion'
     if (changes.tokenrdsarion) {
       console.log("Tokenrdsarion foi atualizado.");
-      minhaFuncao(); // Re-executa a função principal para atualizar dados
+      handleNumerodetellChange(window.numerodetell); // Re-executa a função para atualizar dados
     }
   }
 });
@@ -493,9 +587,51 @@ document.addEventListener('click', function(e) {
     const customContainer = document.getElementById('custom-container');
     if (customContainer) {
       customContainer.classList.add('visible'); // Adiciona a classe 'visible'
+      customContainer.style.display = 'block'; // Garante que o contêiner esteja visível
       console.log("'visible' class adicionada ao custom-container devido ao clique em um ticket.");
     } else {
       console.error("'custom-container' não encontrado.");
     }
   }
 });
+
+// ===== SEÇÃO 14: Funções para Criação das Seções Personalizadas =====
+
+/**
+ * Função para injetar uma seção personalizada na interface
+ * @param {Object} section - Objeto representando a seção
+ * @param {Function} contentGenerator - Função que gera o conteúdo da seção
+ */
+function injectSection(section, contentGenerator) {
+  createExpandableSection(section.label, contentGenerator, section.id);
+}
+
+/**
+ * Função para criar uma seção expansível
+ * @param {string} label - Rótulo da seção
+ * @param {Function} contentGenerator - Função que gera o conteúdo
+ * @param {string} id - ID único da seção
+ */
+function createExpandableSection(label, contentGenerator, id) {
+  const sectionContainer = document.createElement('div');
+  sectionContainer.className = 'section-container';
+
+  const sectionHeader = document.createElement('div');
+  sectionHeader.className = 'section-header';
+  sectionHeader.innerText = label;
+
+  const sectionContent = document.createElement('div');
+  sectionContent.className = 'section-content';
+  sectionContent.style.display = 'none'; // Esconde o conteúdo por padrão
+  sectionContent.appendChild(contentGenerator());
+
+  sectionHeader.addEventListener('click', () => {
+    const isVisible = sectionContent.style.display === 'block';
+    sectionContent.style.display = isVisible ? 'none' : 'block';
+  });
+
+  sectionContainer.appendChild(sectionHeader);
+  sectionContainer.appendChild(sectionContent);
+
+  newElement.appendChild(sectionContainer);
+}
