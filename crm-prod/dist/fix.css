@@ -25,6 +25,7 @@ hr {
   opacity: 0; 
   visibility: hidden; /* Inicialmente oculto */
   transition: width 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
+  overflow-y: scroll;
 }
 
 #custom-container.visible { 
