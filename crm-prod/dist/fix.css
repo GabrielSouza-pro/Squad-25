@@ -1,3 +1,4 @@
+/* ===== Estilos Gerais ===== */
 body { 
   display: flex; 
   flex-direction: row; 
@@ -25,7 +26,11 @@ hr {
   opacity: 0; 
   visibility: hidden; /* Inicialmente oculto */
   transition: width 0.5s ease, opacity 0.5s ease, visibility 0.5s ease;
-  overflow-y: scroll;
+  overflow-y: auto; /* Corrigido para permitir rolagem vertical */
+}
+
+#custom-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 #custom-container.visible { 
@@ -64,15 +69,24 @@ hr {
   text-align: center; 
 }
 
-.expandable-container { 
-  overflow: hidden; 
-  max-height: 0; 
-  opacity: 0; 
-  transition: max-height 0.5s ease-out, opacity 0.5s ease-out; 
-  background-color: rgb(40, 40, 40); 
-  padding: 10px; 
-  box-sizing: border-box; 
-  border-radius: 8px; 
+/* ===== Estilos das Seções Expansíveis ===== */
+.expandable-container {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+  background-color: rgb(40, 40, 40);
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  overflow-y: scroll;
+
+  /* Esconde a barra de rolagem */
+  scrollbar-width: none; /* Firefox */
+}
+
+.expandable-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .expandable-container.expanded { 
@@ -97,8 +111,23 @@ hr {
   background-color: #50505070; 
 }
 
+/* ===== Estilos dos Produtos ===== */
+.div-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
 
-/* Responsividade */
+.div-title {
+  margin-bottom: 5px;
+}
+
+.product-details {
+  /* Você pode adicionar estilos adicionais aqui, se necessário */
+  line-height: 1.5;
+}
+
+/* ===== Responsividade ===== */
 @media screen and (max-width: 1200px) { 
   #custom-container.visible { 
     width: 500px; 
@@ -158,7 +187,7 @@ hr {
   }
 }
 
-/* Estilos para modo escuro */
+/* ===== Estilos para modo escuro ===== */
 #custom-container.modo-escuro { 
   background-color: #1e1e1e; 
   color: #ffffff; 
@@ -178,6 +207,10 @@ hr {
   -webkit-text-fill-color: transparent; 
 }
 
+#custom-container.modo-escuro .div-item {
+  border: 1px solid #686868;
+}
+
 #custom-container.modo-escuro .toggle-buttonn { 
   background-color: #444444; 
   color: #ffffff; 
@@ -191,7 +224,13 @@ hr {
   background-color: rgb(40, 40, 40); 
 }
 
-/* Estilos para modo claro (opção padrão) */
+#custom-container.modo-escuro .div-title {
+  margin-bottom: 5px;
+  color: whitesmoke;
+}
+
+
+/* ===== Estilos para modo claro (opção padrão) ===== */
 #custom-container { 
   border: whitesmoke; 
   background-color: white;
@@ -207,4 +246,8 @@ hr {
 
 #custom-container .expandable-container { 
   background-color: whitesmoke; 
+}
+
+#custom-container  .div-item {
+  border: 1px solid #ddd;
 }
