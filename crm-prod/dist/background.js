@@ -1,6 +1,18 @@
-//background.js
+// background.js
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'fetchData' || request.action === 'fetchDeals' || request.action === 'fetchDealProducts') {
+  const validActions = [
+    'fetchData',
+    'fetchDeals',
+    'fetchDealProducts',
+    'fetchOrganizations',
+    'fetchProducts',
+    'fetchDealStages',
+    'fetchTasks',
+    'fetchActivities'
+  ];
+
+  if (validActions.includes(request.action)) {
     fetch(request.url, {
       method: 'GET',
       headers: request.headers
@@ -13,6 +25,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     })
     .then(data => sendResponse({ success: true, data }))
     .catch(error => sendResponse({ success: false, error: error.message }));
-    return true; // Indica que a resposta será enviada de forma assíncrona
+
+    // Retorna true para indicar que a resposta será enviada de forma assíncrona
+    return true;
   }
 });
