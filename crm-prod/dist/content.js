@@ -794,7 +794,7 @@ function adicionarBotaoToggle() {
     }
     
     customContainer.classList.toggle('visible'); // Alterna a classe 'visible'
-    customContainer.style.display = customContainer.classList.contains('visible') ? 'block' : 'none';
+    // Removido: customContainer.style.display = customContainer.classList.contains('visible') ? 'block' : 'none';
   }); 
 
   // Definindo a cor inicial do botão com base no modo atual
@@ -843,7 +843,6 @@ function atualizarCorBotaoToggle() {
     }
   }
 }
-
 // Adiciona o botão de toggle ao carregar o DOM
 document.addEventListener('DOMContentLoaded', adicionarBotaoToggle);
 
@@ -1241,7 +1240,6 @@ newElement.className = 'custom-container'; // Adiciona uma classe para estiliza�
 // Cria o contêiner para o nome do cliente
 const clientNameContainer = document.createElement('div');
 clientNameContainer.id = 'client-name-container';
-clientNameContainer.classList.add('div-item'); // Adicionado
 
 // Cria o elemento para exibir o nome do cliente
 const clientName = document.createElement('h2');
@@ -1270,8 +1268,6 @@ newElement.appendChild(hr);
 // Adiciona o contêiner personalizado ao corpo do documento
 document.body.appendChild(newElement);
 
-// Esconde o contêiner por padrão
-newElement.style.display = 'none';
 
 // ===== SEÇÃO 11: Inicialização e Execução das Funções Principais =====
 
@@ -1324,7 +1320,7 @@ document.addEventListener('click', function(e) {
     const customContainer = document.getElementById('custom-container');
     if (customContainer) {
       customContainer.classList.add('visible'); // Adiciona a classe 'visible'
-      customContainer.style.display = 'block'; // Garante que o contêiner esteja visível
+      // Removido: customContainer.style.display = 'block'; // Garante que o contêiner esteja visível
       console.log("'visible' class adicionada ao custom-container devido ao clique em um ticket.");
     } else {
       console.error("'custom-container' não encontrado.");
