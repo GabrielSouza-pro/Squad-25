@@ -333,7 +333,7 @@ function fetchDealStages(token, pipelineId) {
               const objective = (stage.objective !== null) ? stage.objective : 'N/A';
 
               const stageInfo = `
-                <p><strong>Nome do Pipeline:</strong> ${pipelineName}</p>
+                <p><strong>Tipo do Funil:</strong> ${pipelineName}</p>
                 <p><strong>Objetivo:</strong> ${objective}</p>
               `;
 
@@ -397,6 +397,14 @@ function fetchDealProducts(token, dealId) {
               productTitle.innerText = `Produto ${index + 1}: ${product.name || 'N/A'}`;
               productDiv.appendChild(productTitle);
 
+              // Tradução do valor de recorrência
+              let recorrenciaTraduzida = 'N/A';
+              if (product.recurrence === 'spare') {
+                recorrenciaTraduzida = 'Único';
+              } else if (product.recurrence === 'monthly') {
+                recorrenciaTraduzida = 'Mensal';
+              }
+
               const productDetails = document.createElement('p');
               productDetails.classList.add('product-details'); // Adiciona a classe para estilização
               productDetails.innerHTML = `
@@ -405,7 +413,7 @@ function fetchDealProducts(token, dealId) {
                 <strong>Quantidade:</strong> ${product.amount !== undefined ? product.amount : 'N/A'}<br>
                 <strong>Total:</strong> ${product.total !== undefined ? `R$ ${parseFloat(product.total).toFixed(2)}` : 'N/A'}<br>
                 <strong>Descrição:</strong> ${product.description || 'N/A'}<br>
-                <strong>Recorrência:</strong> ${product.recurrence || 'N/A'}
+                <strong>Recorrência:</strong> ${recorrenciaTraduzida}
               `;
               productDiv.appendChild(productDetails);
 
@@ -684,13 +692,13 @@ function fetchDealActivities(token, dealId) {
 
               const activityTitle = document.createElement('h3');
               activityTitle.classList.add('div-title'); // Adicionado
-              activityTitle.innerText = `Atividade ${index + 1}`;
+              activityTitle.innerText = `Anotações ${index + 1}`;
               activityDiv.appendChild(activityTitle);
 
               const activityDetails = document.createElement('p');
               activityDetails.classList.add('activity-details'); // Adiciona a classe para estilização
               activityDetails.innerHTML = `
-                <strong>ID da Atividade:</strong> ${activity.id || 'N/A'}<br>
+                <strong>ID da Anotação:</strong> ${activity.id || 'N/A'}<br>
                 <strong>Tipo:</strong> ${activity.type || 'N/A'}<br>
                 <strong>Descrição:</strong> ${activity.description || 'N/A'}<br>
                 <strong>Data:</strong> ${activity.date || 'N/A'}<br>
@@ -701,7 +709,7 @@ function fetchDealActivities(token, dealId) {
             });
           } else {
             const p = document.createElement('p');
-            p.innerText = 'Nenhuma atividade encontrada para este negócio.';
+            p.innerText = 'Nenhuma anotação encontrada para este negócio.';
             p.classList.add('div-item', 'div-title'); // Adicionado
             atividadesContainer.appendChild(p);
           }
@@ -874,7 +882,7 @@ const sectionsList = [
   },
   { 
     id: 'negociacoes', 
-    label: 'Negociações', 
+    label: 'Negociação', 
     content: () => { 
       const container = document.createElement('div');
       container.id = 'negociacoes-container'; // Define o ID para compatibilidade com a extração de markup e nome da organização
@@ -900,26 +908,6 @@ const sectionsList = [
       container.id = 'produtos-container'; // Define o ID para compatibilidade com fetchProducts
       container.innerText = 'Carregando produtos...'; // Texto de carregamento inicial
       return container; 
-    } 
-  },
-  { 
-    id: 'campos_personalizados', 
-    label: 'Campos personalizados', 
-    content: () => { 
-      const p = document.createElement('p'); 
-      p.innerText = 'Conteúdo exclusivo para Campos Personalizados.'; 
-      p.classList.add('div-item'); // Adicionado para consistência
-      return p; 
-    } 
-  },
-  { 
-    id: 'funil_vendas', 
-    label: 'Funil de vendas', 
-    content: () => { 
-      const p = document.createElement('p'); 
-      p.innerText = 'Conteúdo exclusivo para Funil de Vendas.'; 
-      p.classList.add('div-item'); // Adicionado para consistência
-      return p; 
     } 
   },
   { 
@@ -980,16 +968,6 @@ const sectionsList = [
       container.id = 'campanhas-content'; // Define o ID para compatibilidade com a extração de campaign name
       container.innerText = 'Carregando campanhas...'; // Texto de carregamento inicial
       return container; 
-    } 
-  },
-  { 
-    id: 'motivo_perda', 
-    label: 'Motivo da perda', 
-    content: () => { 
-      const p = document.createElement('p'); 
-      p.innerText = 'Conteúdo exclusivo para Motivo da Perda.'; 
-      p.classList.add('div-item'); // Adicionado para consistência
-      return p; 
     } 
   }
 ];
