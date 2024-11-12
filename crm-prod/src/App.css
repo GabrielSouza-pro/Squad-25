@@ -1,0 +1,187 @@
+:root {
+  --background-color: #1e1e1e;
+  --container-bg: rgba(30, 30, 30, 0.9);
+  --border-color: rgba(85, 85, 170, 0.3);
+  --text-color: #ffffff;
+  --placeholder-color: #aaaaaa;
+  --input-bg: #2e2e2e;
+  --accent-color: #59ff10;
+  --button-bg: #59ff10;
+  --button-hover-bg: #4be20f;
+  --title-gradient: radial-gradient(
+    50% 50% at 50% 50%,
+    #59ff10 0%,
+    #64fe6d 36.94%,
+    #67fd88 55.15%,
+    #6afd9d 70.2%,
+    #70fcd0 95.5%
+  );
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --transition-speed: 0.3s;
+}
+
+
+/* Corpo da página */
+body {
+  background-color: var(--background-color);
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  max-width: 300px;
+  min-width: 300px;
+  border-radius: 10px;
+}
+
+/* Container principal */
+.App {
+  min-width: 335px;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+
+/* O restante do CSS permanece o mesmo */
+
+/* Título principal com efeito de gradiente */
+.crm-titulo {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  background: var(--title-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.w{
+  color: white;
+}
+
+/* Subtítulos */
+h2 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Labels */
+label.textos-baixos {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* Campos de entrada */
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: border-color var(--transition-speed);
+}
+
+input[type="text"]:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+input[type="text"]::placeholder {
+  color: var(--placeholder-color);
+}
+
+/* Grupo de checkboxes */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
+/* Botão de salvar */
+#salvar {
+  padding: 12px;
+  background-color: var(--button-bg);
+  border: none;
+  border-radius: 5px;
+  color: var(--background-color);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+#salvar:hover {
+  background-color: var(--button-hover-bg);
+}
+
+/* Linha horizontal estilizada */
+#hr1 {
+  border: 0;
+  height: 1px;
+  background: #444;
+  margin: 20px 0;
+}
+
+/* Espaçamento adicional */
+#divisao {
+  height: 20px;
+}
+
+/* Responsividade para tamanhos de popup menores */
+@media (max-width: 350px) {
+  .App {
+    padding: 15px;
+  }
+
+  .crm-titulo {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  input[type="text"],
+  #salvar {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  label.textos-baixos {
+    font-size: 13px;
+  }
+
+  .checkbox-group label {
+    font-size: 13px;
+  }
+}
