@@ -1,7 +1,7 @@
 // ===== SEÇÃO 1: Inicialização e Definição de Propriedades =====
 
 // Log para confirmar a injeção do script
-console.log("JavaScript injetado em uma página!");
+
 
 // Definindo propriedades globais
 window.user_idre = null;
@@ -26,7 +26,6 @@ Object.defineProperty(window, 'numerodetell', {
   },
   set: function (value) {
     if (numerodetellValue !== value) {
-      console.log(`numerodetell mudou de ${numerodetellValue} para ${value}`);
       numerodetellValue = value;
       tratarMudancaNumeroTelefone(value); // Chama função para lidar com a mudança
     }
@@ -45,7 +44,6 @@ function tratarMudancaNumeroTelefone(newNumber) {
   // Obtém o token do Chrome Storage
   chrome.storage.local.get(['tokenrdsarion'], (result) => {
     let tokenrdsarion = result.tokenrdsarion;
-    console.log("Token rdsarion:", tokenrdsarion);
 
     if (!tokenrdsarion) {
       console.error("tokenrdsarion não encontrado no chrome.storage.local.");
@@ -69,13 +67,11 @@ function tratarMudancaNumeroTelefone(newNumber) {
       (response) => {
         if (response && response.success) { // Safe check
           const data = response.data;
-          console.log("Resposta da API:", data);
           if (data.total > 0 && data.contacts && data.contacts.length > 0) {
             const contact = data.contacts[0];
             const contactId = contact._id;
             if (contactId) {
               window.user_idre = contactId;
-              console.log("user_idre atualizado para:", window.user_idre);
             } else {
               console.error("A chave '_id' não foi encontrada no contato.");
             }
@@ -83,7 +79,6 @@ function tratarMudancaNumeroTelefone(newNumber) {
             // Verifica e extrai os IDs dos deals
             if (contact.deals && contact.deals.length > 0) {
               window.deals_idre = contact.deals.map(deal => deal.id || deal._id).join(', '); // Convertido para string
-              console.log("deals_idre atualizado para:", window.deals_idre);
               
               // Após obter os deal_id, realiza a requisição adicional para cada deal
               const dealIds = window.deals_idre.split(',').map(id => id.trim());
@@ -94,7 +89,6 @@ function tratarMudancaNumeroTelefone(newNumber) {
               });
               
             } else {
-              console.log("Nenhum deal encontrado para o contato.");
               window.deals_idre = ''; // Limpa a variável caso não haja deals
             }
           } else {
@@ -131,14 +125,12 @@ function buscarDetalhesNegociacao(token, dealId) {
     (response) => {
       if (response && response.success) { // Safe check
         const dealData = response.data;
-        console.log(`Detalhes do Deal (${dealId}):`, dealData);
         if (dealData.total > 0 && dealData.deals && dealData.deals.length > 0) {
           const deal = dealData.deals[0];
 
           // Extraindo ID dos organization_segments
           if (deal.organization && deal.organization.organization_segments) {
             window.organization_segments_ids = deal.organization.organization_segments.map(segment => segment.id);
-            console.log("IDs de organization_segments:", window.organization_segments_ids);
           } else {
             console.error("organization_segments não encontrados no deal.");
           }
@@ -146,7 +138,6 @@ function buscarDetalhesNegociacao(token, dealId) {
           // Extraindo ID do deal_source
           if (deal.deal_source && deal.deal_source.id) {
             window.deal_source_id = deal.deal_source.id;
-            console.log("ID do deal_source:", window.deal_source_id);
           } else {
             console.error("deal_source não encontrado no deal.");
           }
@@ -154,7 +145,6 @@ function buscarDetalhesNegociacao(token, dealId) {
           // Extraindo ID da campaign
           if (deal.campaign && deal.campaign.id) {
             window.campaign_id = deal.campaign.id;
-            console.log("ID da campaign:", window.campaign_id);
           } else {
             console.error("campaign não encontrada no deal.");
           }
@@ -162,7 +152,6 @@ function buscarDetalhesNegociacao(token, dealId) {
           // ===== EXTRACAO DO NOME DA CAMPAIN =====
           if (deal.campaign && deal.campaign.name) {
             const campaignName = deal.campaign.name;
-            console.log("Nome da campanha:", campaignName);
 
             const campanhasContainer = document.getElementById('campanhas-content');
             if (campanhasContainer) {
@@ -229,7 +218,6 @@ function buscarDetalhesNegociacao(token, dealId) {
           // ===== NOVA SEÇÃO: Extração e Exibição do Nome do Deal Source =====
           if (deal.deal_source && deal.deal_source.name) {
             const dealSourceName = deal.deal_source.name;
-            console.log("Nome do deal_source:", dealSourceName);
             // Exibe no 'fontes-container'
             const fontesContainer = document.getElementById('fontes-content');
             if (fontesContainer) {
@@ -317,7 +305,6 @@ function buscarEtapasFunilVendas(token, pipelineId) {
     (response) => {
       if (response && response.success) { // Verificação de segurança
         const dealStages = response.data.deal_stages || response.data; // Ajuste conforme a estrutura da resposta
-        console.log('Deal Stages:', dealStages);
 
         // Seleciona o container
         const etapasFunilVendasContainer = document.getElementById('etapas_funil_vendas-container');
@@ -379,7 +366,6 @@ function buscarProdutosNegociacao(token, dealId) {
     (response) => {
       if (response && response.success) { // Safe check
         const dealProducts = response.data.deal_products;
-        console.log(`Produtos da Negociação (${dealId}):`, dealProducts);
 
         // Seleciona o container da seção 'produto_negociacoes'
         const produtoNegociacoesContainer = document.getElementById('produto_negociacoes-content');
@@ -473,7 +459,6 @@ function buscarProdutos(token) {
     (response) => {
       if (response && response.success) {
         const productsData = response.data;
-        console.log("Produtos recebidos:", productsData);
 
         const produtosContainer = document.getElementById('produtos-container');
         if (produtosContainer) {
@@ -536,7 +521,6 @@ function buscarOrganizacoes(token, organizationSegmentId) {
     (response) => {
       if (response && response.success) { // Safe check
         const data = response.data;
-        console.log(`Resposta da API de Organizações para o segmento (${organizationSegmentId}):`, data);
 
         const organizacoesContainer = document.getElementById('empresas-content');
         if (organizacoesContainer) {
@@ -604,7 +588,6 @@ function buscarTarefasNegociacao(token, dealId) {
     (response) => {
       if (response && response.success) { // Safe check
         const tasksData = response.data;
-        console.log(`Tarefas da Negociação (${dealId}):`, tasksData);
 
         // Seleciona o container da seção 'tarefas'
         const tarefasContainer = document.getElementById('tarefas-content');
@@ -673,7 +656,6 @@ function buscarAtividadesNegociacao(token, dealId) {
     (response) => {
       if (response && response.success) { // Safe check
         const activitiesData = response.data;
-        console.log(`Atividades da Negociação (${dealId}):`, activitiesData);
 
         // Armazena as atividades globalmente, se necessário
         window.deal_activities = activitiesData.activities || [];
@@ -1037,7 +1019,6 @@ function adicionarElementoNaSecao(sectionId, element) {
  */
 function executarFuncaoPrincipal() {
   let token = window.localStorage.getItem('token');
-  console.log("Token original:", token);
 
   if (!token) {
     console.error("Token não encontrado no localStorage da página.");
@@ -1046,10 +1027,8 @@ function executarFuncaoPrincipal() {
 
   // Remove aspas do token
   token = token.replace(/["']/g, '');
-  console.log("Token sem aspas:", token);
 
   const urlAtual = window.location.href;
-  console.log("URL atual:", urlAtual);
 
   // Expressão regular para capturar o ID da URL
   const regex = /\/atendimento\/(\d+)/;
@@ -1057,10 +1036,8 @@ function executarFuncaoPrincipal() {
 
   if (match && match[1]) {
     let id = match[1].replace(/\s+/g, '');
-    console.log("ID capturado e filtrado da URL:", id);
 
     const apiUrl = `https://chatapi.jetsalesbrasil.com/tickets/${id}?id=${id}`;
-    console.log("URL da API que será chamada:", apiUrl);
 
     // Realiza a requisição fetch para a API
     fetch(apiUrl, {
@@ -1077,17 +1054,14 @@ function executarFuncaoPrincipal() {
       return response.json();
     })
     .then(data => {
-      console.log("Resposta completa da API:", data);
 
       // Atualiza o nome do cliente na interface
       if (data.contact && data.contact.pushname) {
         const content = data.contact.pushname;
-        console.log("Nome do cliente: " + content);
 
         const clientNameElement = document.getElementById('clientName');
         if (clientNameElement) {
           clientNameElement.innerText = `Cliente: ${content}`;
-          console.log("Texto atualizado para: " + content);
         } else {
           console.log('Elemento clientName não encontrado');
         }
@@ -1098,7 +1072,6 @@ function executarFuncaoPrincipal() {
       // Atualiza o número do cliente na propriedade 'numerodetell'
       if (data.contact && data.contact.number) {
         window.numerodetell = data.contact.number;
-        console.log("Número do cliente armazenado em numerodetell:", window.numerodetell);
       } else {
         console.error("A chave 'contact.number' não foi encontrada na resposta.");
       }
@@ -1122,7 +1095,7 @@ function monitorarAlteracoesURL() {
   setInterval(() => {
     const urlAtual = window.location.href;
     if (urlAnterior !== urlAtual) {
-      console.log("A URL mudou. Nova URL:", urlAtual);
+
       executarFuncaoPrincipal(); // Executa a função principal novamente
       urlAnterior = urlAtual;
 
@@ -1269,7 +1242,6 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
     // Verifica se houve mudanças no 'tokenrdsarion'
     if (changes.tokenrdsarion) {
-      console.log("Tokenrdsarion foi atualizado.");
       tratarMudancaNumeroTelefone(window.numerodetell); // Re-executa a função para atualizar dados
     }
   }
@@ -1288,7 +1260,6 @@ document.addEventListener('click', function(e) {
     if (customContainer) {
       customContainer.classList.add('visible'); // Adiciona a classe 'visible'
       // Removido: customContainer.style.display = 'block'; // Garante que o contêiner esteja visível
-      console.log("'visible' class adicionada ao custom-container devido ao clique em um ticket.");
     } else {
       console.error("'custom-container' não encontrado.");
     }
