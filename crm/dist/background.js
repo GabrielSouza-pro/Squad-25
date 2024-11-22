@@ -59,7 +59,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               type: 'normal', // Tipo 'normal' para permitir manipulação do estado
               width: 1,       // Largura de 1 pixel
               height: 1,      // Altura de 1 pixel
-              bottom: 100000000,
               focused: false
             }, (window) => {
               if (chrome.runtime.lastError) {
