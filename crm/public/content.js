@@ -1323,3 +1323,20 @@ document.addEventListener('click', function(e) {
 });
 
 
+// ===== SEÇÃO 14: Função que envia mensagem para o background scriptts =====
+// Função que envia mensagem para o background script
+function notificarBackgroundSobreLoad() {
+  chrome.runtime.sendMessage({ action: 'paginaCarregada' }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Erro ao enviar mensagem para o background:', chrome.runtime.lastError);
+    } else {
+      console.log('Mensagem enviada para o background:', response.status);
+    }
+  });
+}
+
+// Adiciona listener para o evento de load
+window.addEventListener('load', () => {
+  console.log('Evento de load detectado na página.');
+  notificarBackgroundSobreLoad();
+});
