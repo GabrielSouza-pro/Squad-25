@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "CRM Extension",
+  "version": "1.0",
+  "description": "Uma extensão para CRM",
+  
+  "icons": {
+    "16": "jetsales.png",
+    "48": "jetsales.png",
+    "128": "jetsales.png"
+  },
+  
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "jetsales.png"
+  },
+  
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "background",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "identity",
+    "identity.email",
+    "notifications"
+  ],
+  
+  "host_permissions": [
+    "https://chat.jetsalesbrasil.com/*",
+    "https://chatapi.jetsalesbrasil.com/*",
+    "https://27t3grrlv2.execute-api.us-east-1.amazonaws.com/*",
+    "https://crm.rdstation.com/*"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": ["https://chat.jetsalesbrasil.com/*"],
+      "css": ["fix.css"],
+      "js": ["content.js"]
+    }
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["fix.css"],
+      "matches": ["https://chat.jetsalesbrasil.com/*"]
+    }
+  ]
+}
